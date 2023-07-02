@@ -1,0 +1,19 @@
+section {
+  background-color: #a3eae6;
+}
+
+::-webkit-input-placeholder {
+  color: lightgray;
+}
+
+::-moz-placeholder {
+  color: lightgray;
+}
+
+::-ms-placeholder {
+  color: lightgray;
+}
+
+::placeholder {
+  color: lightgray;
+}
