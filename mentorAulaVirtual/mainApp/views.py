@@ -14,7 +14,28 @@ def loginUser(request):
       return render(request, 'registration/login.html',{'form':AuthenticationForm(), 'error':'Nombre de usuario y contraseña no coinciden'})
     else:
       login(request, user)
-      return redirect('home')
+      return redirect('clients')
 
-def home(request):
-  return render(request, "admin/mainAdmin.html")
+
+@login_required
+def clients(request):
+  if request.method == 'GET':
+    return render(request,'admin/clients.html', {'form':AuthenticationForm()})
+  else:
+    print(request.POST['username'])
+    print(request.POST['password'])
+    user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
+    if user is None:
+      return render(request, 'admin/clients.html',{'form':AuthenticationForm(), 'error':'Nombre de usuario y contraseña no coinciden'})
+    else:
+      login(request, user)
+      return redirect('login')
+
+
+@login_required
+def logoutUser(request):
+  print("Método:",request.method )
+  if request.method == 'GET':
+    print("logging out")
+    logout(request)
+    return redirect('login')
