@@ -16,7 +16,6 @@ def loginUser(request):
       login(request, user)
       return redirect('clients')
 
-
 @login_required
 def clients(request):
   if request.method == 'GET':
