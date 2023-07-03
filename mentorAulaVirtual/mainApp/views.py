@@ -28,7 +28,7 @@ def clients(request):
       return render(request, 'admin/clients.html',{'form':AuthenticationForm(), 'error':'Nombre de usuario y contraseña no coinciden'})
     else:
       login(request, user)
-      return redirect('login')
+      return redirect('loginUser')
 
 
 @login_required
@@ -37,4 +37,4 @@ def logoutUser(request):
   if request.method == 'GET':
     print("logging out")
     logout(request)
-    return redirect('login')
+    return redirect('loginUser')
