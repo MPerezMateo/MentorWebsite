@@ -1,8 +1,5 @@
 {
-  "[python]": {
-    "editor.defaultFormatter": "ms-python.black-formatter"
-  },
-  "python.formatting.provider": "none",
+  "python.terminal.activateEnvInCurrentTerminal": true,
   "html.format.extraLiners": "",
   "html.autoCreateQuotes": true,
   "html.format.indentHandlebars": true,

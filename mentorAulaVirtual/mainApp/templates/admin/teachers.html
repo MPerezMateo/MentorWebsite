@@ -19,7 +19,43 @@
     <h3>Lista Profesores</h3>
   </div>
 
- <div style ="position: fixed; bottom: 40px; right: 40px;">
+  <div class = "row d-flex py-4 justify-content-center">
+    <table class="table table-bordered">
+      <thead >
+        <tr>
+          <th scope="col">Nº</th>
+          <th scope="col">Id</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Correo</th>
+          <th scope="col">Teléfono</th>
+          <th scope="col">Modificar</th>
+        </tr>
+      </thead>
+      <tbody >
+          {% if teachers %}
+          {% for teacher in teachers%}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{teacher.id}}</td>
+            <td>{{teacher.name}}</td>
+            <td>{{teacher.surnames}}</td>
+            <td>{{teacher.email}}</td>
+            <td>{{teacher.phone}}</td>
+
+            <td>
+                <button value="{{movie.id}}" onclick=deleteMovie(this.value)>
+                    delete
+                </button>
+              </td>
+          </tr>
+          {% endfor %}
+          {% endif %}
+      </tbody>
+    </table>
+
+  </div>
+  <div style ="position: fixed; bottom: 40px; right: 40px;">
     <a class="btn text-white" style="background-color: #55acee;" role="button">  
       Añadir Profesor
       <i class="fas fa-plus"></i>
