@@ -17,3 +17,8 @@ section {
 ::placeholder {
   color: lightgray;
 }
+
+.floatingTag {
+  position: fixed;
+  background-color: green;
+}
