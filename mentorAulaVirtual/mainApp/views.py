@@ -40,15 +40,13 @@ def clients(request):
 def teachers(request):
     teachers = Teacher.objects.all()
     staff = User.objects.values().filter(is_staff=True)
-    print(staff[0]['id'])
+
     if request.method == 'GET':
         return render(request, 'admin/teachers.html', {'form': TeacherForm(), 'teachers': teachers, 'staff': staff})
     else:
         try:
-            form = TeacherForm(request.POST)
+            form = TeacherForm(request.POST, request.FILES)
             for key, value in dict(request.POST).items(): print(key, '-> ', value)
-            # print(form.is_valid())
-
             newTeacher = form.save(commit=False)
             newTeacher.creator = request.user
             newTeacher.save()

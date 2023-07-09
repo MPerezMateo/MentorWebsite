@@ -32,7 +32,7 @@
   </div>
   <hr> <!-- Linea divisioria-->
   <!-- Empieza el formulario -->
-  <form method = "POST">
+  <form method = "POST" enctype="multipart/form-data">
     {% csrf_token %}
 
     <!-- Bloque 1 -->
@@ -40,7 +40,7 @@
       Etiqueta
     </div>
 
-    <div class = "row d-flex py-2 justify-content-center">
+    <!--<div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Categoría
       </div>
@@ -52,7 +52,7 @@
           <option value="3">Three</option>
         </select>
       </div>
-    </div>
+    </div>-->
 
     <hr>
 
@@ -129,6 +129,15 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
+        Foto de Perfil
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="file" name="profilePic" accept="image/*" onchange="loadFile(event)">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
         Descripción
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
@@ -136,6 +145,17 @@
           {{teacher.descr}}
         </textarea>
       </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Foto de Perfil
+      </div>
+      {% if teacher.profilePic %}
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <img src = {{teacher.profilePic.url}} id="output" width="200"/>
+      </div>
+      {% endif %}
     </div>
 
     <!-- Bloque 2 -->

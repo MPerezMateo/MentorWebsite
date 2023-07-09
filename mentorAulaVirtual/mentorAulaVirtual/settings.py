@@ -132,3 +132,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 INFO_EMAIL = "info@mentorclasesparticulares.com"
 
 LOGIN_URL = '/login'
+
+MEDIA_ROOT = ''
+
+MEDIA_URL = ''

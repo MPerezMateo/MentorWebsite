@@ -84,10 +84,9 @@
   </div>
   <hr> <!-- Linea divisioria-->
   <!-- Empieza el formulario -->
-  <form method = "POST">
+  <form method = "POST" enctype="multipart/form-data">
     {% csrf_token %}
 
-    
     <!-- Bloque 1 -->
     <div class = "row d-flex py-2 justify-content-center">
       Etiqueta
@@ -201,6 +200,15 @@
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
         <input type="file" name="profilePic" accept="image/*" onchange="loadFile(event)">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Contrato
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="file" name="contract" accept="application/pdf">
       </div>
     </div>
 
