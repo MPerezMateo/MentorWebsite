@@ -7,61 +7,9 @@
 
 {{ error }}
 
-<div class = "container py-5 vh-100">
-  <div class = "row d-flex justify-content-left">
-    <div class = "col-1 col-sm-auto">
-      <img src = "{% static 'images/teacherIcon.png' %}" height = 50px>
-    </div>
-    <div class = "col-10 col-sm-auto d-flex align-items-center">
-      <h3>Profesores</h3>
-    </div>
-  </div>
-
-  <div class = "row d-flex py-4 justify-content-center">
-    <table class="table table-bordered">
-      <thead >
-        <tr>
-          <th scope="col">Nº</th>
-          <th scope="col">Id</th>
-          <th scope="col">Nombre</th>
-          <th scope="col">Apellidos</th>
-          <th scope="col">Correo</th>
-          <th scope="col">Teléfono</th>
-          <th scope="col">Modificar</th>
-        </tr>
-      </thead>
-      <tbody >
-          {% if teachers %}
-          {% for teacher in teachers%}
-          <tr>
-            <td>{{forloop.counter}}</td>
-            <td>{{teacher.id}}</td>
-            <td>{{teacher.name}}</td>
-            <td>{{teacher.surnames}}</td>
-            <td>{{teacher.email}}</td>
-            <td>{{teacher.phone}}</td>
-
-            <td>
-              <a href="{% url 'editTeacher' teacher.id %}">
-                <i class='fas fa-2xl fa-edit'></i>
-              </a>
-              </td>
-          </tr>
-          {% endfor %}
-          {% endif %}
-      </tbody>
-    </table>
-
-  </div>
-  <div style ="position: fixed; bottom: 40px; right: 40px;">
-    <a class="btn text-white" style="background-color: #55acee;" role="button">  
-      Añadir Profesor
-      <i class="fas fa-plus"></i>
-    </a>
-  </div>
-</div>
 
 <div class = "container py-3 border border-primary border-3 rounded" style= "border-color: #55acee;">
+  
   <div class = "row">
     <div class = "col ps-5" >
       <img src = "{% static 'images/teacherIcon.png' %}" height = 50px>
@@ -77,7 +25,7 @@
       </a> 
     </div>
     <div class = "col d-flex align-items-center justify-content-end px-5 ">
-      <a role="button">  
+      <a role="button" href = "{% url 'teachers' %}">  
         <i class="fa fa-2xl fa-times"></i>
       </a>
     </div>
@@ -87,37 +35,21 @@
   <form method = "POST">
     {% csrf_token %}
 
-    
     <!-- Bloque 1 -->
     <div class = "row d-flex py-2 justify-content-center">
       Etiqueta
     </div>
 
-    <!--<div class = "row d-flex py-2 justify-content-center">
+    <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Categoría
       </div>
       <div class = "col-3 col-sm-auto ps-5" >
-        <select name=category class="form-select" aria-label="Default select example">
-          <option value="Potencial">Potencial</option>
+        <select class="form-select" aria-label="Default select example">
+          <option selected>Categoría</option>
           <option value="1">One</option>
           <option value="2">Two</option>
           <option value="3">Three</option>
-        </select>
-      </div>
-    </div>-->
-
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Administrador
-      </div>
-      <div class = "col-3 col-sm-auto ps-5" >
-        <select name="admin" class="form-select" aria-label="Default select example">
-          {% if staff %}
-          {% for admin in staff %}
-            <option value={{admin.id}}>{{admin.username}}</option>
-          {% endfor %}
-          {% endif %}
         </select>
       </div>
     </div>
@@ -133,7 +65,7 @@
         Nombre profesor
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input name = "name" id = "name" class = "form-control form-control-lg" placeholder = "Paco" required/>
+        <input value="{{teacher.name}}" name = "name" id = "name" class = "form-control form-control-lg" placeholder = "Paco" required/>
       </div>
     </div>
 
@@ -142,7 +74,7 @@
         Apellidos profesor
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input name = "surnames" id = "surnames" class = "form-control form-control-lg" placeholder = "Pérez Rordriguez" required/>
+        <input value="{{teacher.surnames}}" name = "surnames" id = "surnames" class = "form-control form-control-lg" placeholder = "Pérez Rordriguez" required/>
       </div>
     </div>
 
@@ -151,7 +83,7 @@
         Teléfono profesor
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="tel" id="phone" name="phone" placeholder="612345678" pattern="[0-9]{9}" required >
+        <input value="{{teacher.phone}}" type="tel" id="phone" name="phone" placeholder="612345678" pattern="[0-9]{9}" required >
       </div>
     </div>
 
@@ -160,7 +92,7 @@
         Correo
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="email" name="email" id="email" placeholder="correo@gmail.com" required >
+        <input value="{{teacher.email}}" type="email" name="email" id="email" placeholder="correo@gmail.com" required >
       </div>
     </div>
     
@@ -169,7 +101,7 @@
         Año de nacimiento
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="yearBirth" id="yearBirth"  placeholder ="1999"><!--required -->
+        <input value="{{teacher.yearBirth}}" type="number" name="yearBirth" id="yearBirth"  placeholder ="1999"><!--required -->
       </div>
     </div>
 
@@ -178,7 +110,7 @@
         DNI
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="text" name="nid" id="nid"  placeholder= "01234567A"><!--required -->
+        <input value="{{teacher.nid}}" type="text" name="nid" id="nid"  placeholder= "01234567A"><!--required -->
       </div>
     </div>
 
@@ -187,7 +119,7 @@
         Dirección
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="text" name="address" id="address" placeholder="Calle X, Portal Y Piso Z Puerta W"> <!--required -->
+        <input value="{{teacher.address}}" type="text" name="address" id="address" placeholder="Calle X, Portal Y Piso Z Puerta W"> <!--required -->
       </div>
     </div>
 
@@ -197,30 +129,15 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Foto de Perfil
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="file" name="profilePic" accept="image/*" onchange="loadFile(event)">
-      </div>
-    </div>
-
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
         Descripción
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea  name = "descr"></textarea><!---->
+        <textarea name = "descr">
+          {{teacher.descr}}
+        </textarea>
       </div>
     </div>
 
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Foto de Perfil
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <img id="output" width="200"/>
-      </div>
-    </div>
     <!-- Bloque 2 -->
         
     <div class = "row d-flex py-2 justify-content-center">
@@ -232,7 +149,7 @@
         Estudios
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input id = "studies" name = "studies" class = "form-control form-control-lg" placeholder = "Estudios"/>
+        <input value="{{teacher.studies}}" id = "studies" name = "studies" class = "form-control form-control-lg" placeholder = "Estudios"/>
       </div>
     </div>
 
@@ -256,7 +173,9 @@
         Especialidad
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea name = "notes"></textarea>
+        <textarea name = "notes">
+          {{teacher.notes}}
+        </textarea>
       </div>
     </div>
 
@@ -265,7 +184,7 @@
         Experiencia docente
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="text" name="xpYears" id="xpYears"> <!--required  -->
+        <input value="{{teacher.xpYears}}" type="text" name="xpYears" id="xpYears"> <!--required  -->
       </div>
     </div>
 
@@ -274,31 +193,25 @@
         Objetivo de horas semanales
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="estHours" id="estHours"> <!--required  -->
+        <input value="{{teacher.estHours}}" type="number" name="estHours" id="estHours"> <!--required  -->
       </div>
     </div>
 
     <div class = "row d-flex py-5 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5 " >
-        <button type="submit" class="btn btn-lg" style="background-color: #00C4BA">
+        <button type="submit" method="POST" class="btn btn-lg" style="background-color: #00C4BA">
           Guardar
           <img class= "ps-1" src = "{% static 'images/save.png' %}" height = 20px>
         </button>
       </div>
+
       <div class = "col-3 col-sm-auto ps-5 " >
-        <button type="button" class="btn btn-lg" style="background-color: #00C4BA">
-          Descargar
+        <a href ="{% url 'deleteTeacher' teacher.id %}" type="button" class="btn btn-lg" style="background-color: #00C4BA">
+          Borrar
           <img class= "ps-1" src = "{% static 'images/download.png' %}" height = 20px>
-        </button>
+        </a>
       </div>
     </div>
   </form>
 </div>
-
-<script>
-  var loadFile = function(event) {
-      var image = document.getElementById('output');
-      image.src=URL.createObjectURL(event.target.files[0]);
-  };
-</script>
 {% endblock content %}

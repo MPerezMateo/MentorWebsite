@@ -2,59 +2,95 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+
 from .models import Teacher
 from .forms import TeacherForm
 
+
 def loginUser(request):
-  if request.method == 'GET':
-    return render(request,'registration/login.html', {'form':AuthenticationForm()})
-  else:
-    user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-    if user is None:
-      return render(request, 'registration/login.html',{'form':AuthenticationForm(), 'error':'Nombre de usuario y contraseña no coinciden'})
+    if request.method == 'GET':
+        return render(request, 'registration/login.html', {'form': AuthenticationForm()})
     else:
-      login(request, user)
-      return redirect('teachers') # Redirigimos a la 1º pantalla (profes)
+        user = authenticate(
+            request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'registration/login.html', {'form': AuthenticationForm(), 'error': 'Nombre de usuario y contraseña no coinciden'})
+        else:
+            login(request, user)
+            # Redirigimos a la 1º pantalla (profes)
+            return redirect('teachers')
+
 
 @login_required
 def clients(request):
-  if request.method == 'GET':
-    return render(request,'admin/clients.html', {'form':AuthenticationForm()})
-  else:
-    user = authenticate(request, username=request.POST['username'], password=request.POST['password'])
-    if user is None:
-      return render(request, 'admin/clients.html',{'form':AuthenticationForm(), 'error':'Nombre de usuario y contraseña no coinciden'})
+    if request.method == 'GET':
+        return render(request, 'admin/clients.html', {'form': AuthenticationForm()})
     else:
-      login(request, user)
-      return redirect('loginUser')
+        user = authenticate(
+            request, username=request.POST['username'], password=request.POST['password'])
+        if user is None:
+            return render(request, 'admin/clients.html', {'form': AuthenticationForm(), 'error': 'Nombre de usuario y contraseña no coinciden'})
+        else:
+            login(request, user)
+            return redirect('loginUser')
+
 
 @login_required
 def teachers(request):
-  if request.method == 'GET':
     teachers = Teacher.objects.all()
-    print(teachers)
-    return render(request,'admin/teachers.html', {'form':TeacherForm(), 'teachers': teachers})
-  else:
-    #try:
-      form = TeacherForm(request.POST)
+    staff = User.objects.values().filter(is_staff=True)
+    print(staff[0]['id'])
+    if request.method == 'GET':
+        return render(request, 'admin/teachers.html', {'form': TeacherForm(), 'teachers': teachers, 'staff': staff})
+    else:
+        try:
+            form = TeacherForm(request.POST)
+            for key, value in dict(request.POST).items(): print(key, '-> ', value)
+            # print(form.is_valid())
 
-      for key, value in dict(request.POST).items():
-        print(key, '-> ', value)
-      
-      print(form.is_valid())
-      print(form)
-      newTeacher = form.save(commit=False)
-      newTeacher.creator = request.user
-      newTeacher.save()
-      return redirect('teachers')
-    #except ValueError:
-    #  return render(request, 'admin/teachers.html', {'form':TeacherForm(),'error': 'Invalid data in the Teacher form'})
+            newTeacher = form.save(commit=False)
+            newTeacher.creator = request.user
+            newTeacher.save()
+            return redirect('teachers')
+        except Exception as e:
+            print(e)
+            return render(request, 'admin/teachers.html', {'form': form, 'staff': staff, 'teachers': teachers, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y el profesor no se encuentre en el sistema'})
 
 
 @login_required
 def logoutUser(request):
-  print("Método:",request.method )
-  if request.method == 'GET':
-    print("logging out")
-    logout(request)
-    return redirect('loginUser')
+    print("Método:", request.method)
+    if request.method == 'GET':
+        print("logging out")
+        logout(request)
+        return redirect('loginUser')
+
+
+@login_required
+def editTeacher(request, teacher_id):
+    teacher = get_object_or_404(Teacher, pk=teacher_id)
+    if request.method == 'GET':
+        form = TeacherForm(instance=teacher)
+        return render(request, 'admin/teacherEdit.html', {'teacher': teacher, 'form': form})
+
+    else:
+        try:
+            form = TeacherForm(request.POST, instance=teacher)
+            form.save()
+            return redirect('teachers')
+        except ValueError:
+            return render(request, 'admin/teacherEdit.html', {'todo': todo, 'form': form, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y el profesor no se encuentre en el sistema'})
+
+
+@login_required
+def deleteTeacher(request, teacher_id):
+    print("AAAA")
+
+    teacher = get_object_or_404(Teacher, pk=teacher_id)
+    print(request.method)
+    if request.method == 'GET':
+        teacher.delete()
+        return redirect('teachers')
+    else:
+        return render(request, 'admin/teacherEdit.html', {'teacher': teacher})
