@@ -54,6 +54,21 @@
       </div>
     </div>-->
 
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Administrador
+      </div>
+      <div class = "col-3 col-sm-auto ps-5" >
+        <select name="admin" class="form-select" aria-label="Default select example">
+          {% if staff %}
+          {% for admin in staff %}
+            <option value={{admin.id}}>{{admin.username}}</option>
+          {% endfor %}
+          {% endif %}
+        </select>
+      </div>
+    </div>
+
     <hr>
 
     <div class = "row d-flex py-2 justify-content-center">
@@ -134,6 +149,17 @@
       <div class = "col-3 col-sm-auto ps-5 " >
         <input type="file" name="profilePic" accept="image/*" onchange="loadFile(event)">
       </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Contrato
+      </div>
+      {% if teacher.contract %}
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input value={{teacher.contract}} type="file" name="contract" accept="application/pdf">
+      </div>
+      {% endif %}
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">

@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
 from .models import Teacher
-from .forms import TeacherForm
+from .forms import TeacherForm, TeacherSearchForm
 
 
 def loginUser(request):
@@ -40,9 +40,11 @@ def clients(request):
 def teachers(request):
     teachers = Teacher.objects.all()
     staff = User.objects.values().filter(is_staff=True)
-
+    searchName = request.GET.get("nameSearch")
+    if searchName:
+      teachers = teachers.filter(name = searchName)
     if request.method == 'GET':
-        return render(request, 'admin/teachers.html', {'form': TeacherForm(), 'teachers': teachers, 'staff': staff})
+        return render(request, 'admin/teachers.html', {'form': TeacherForm(), 'searchForm': TeacherSearchForm(), 'teachers': teachers, 'staff': staff})
     else:
         try:
             form = TeacherForm(request.POST, request.FILES)
@@ -68,17 +70,19 @@ def logoutUser(request):
 @login_required
 def editTeacher(request, teacher_id):
     teacher = get_object_or_404(Teacher, pk=teacher_id)
+    staff = User.objects.values().filter(is_staff=True)
     if request.method == 'GET':
         form = TeacherForm(instance=teacher)
-        return render(request, 'admin/teacherEdit.html', {'teacher': teacher, 'form': form})
+        return render(request, 'admin/teacherEdit.html', {'teacher': teacher,'staff':staff, 'form': form})
 
     else:
         try:
             form = TeacherForm(request.POST, instance=teacher)
             form.save()
+            
             return redirect('teachers')
         except ValueError:
-            return render(request, 'admin/teacherEdit.html', {'todo': todo, 'form': form, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y el profesor no se encuentre en el sistema'})
+            return render(request, 'admin/teacherEdit.html', {'teacher': teacher,'staff':staff, 'form': form, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y el profesor no se encuentre en el sistema'})
 
 
 @login_required

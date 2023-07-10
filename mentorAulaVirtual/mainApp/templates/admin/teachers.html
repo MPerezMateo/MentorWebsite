@@ -1,9 +1,10 @@
 {% extends 'baseAdmin.html' %}
+{% load static %}
+
 {% block title %}Mentor Aula Virtual
 {% endblock %}
 
 {% block content %}
-{% load static %}
 
 {{ error }}
 
@@ -16,6 +17,17 @@
       <h3>Profesores</h3>
     </div>
   </div>
+
+  <!-- Filtros -->
+  <form method="GET">
+    <input name = "nameSearch" id = "nameSearch" class = "form-control form-control-lg" placeholder = "Nombre Profesor"/>
+    <input name = "subjSearch" id = "subjSearch" class = "form-control form-control-lg" placeholder = "Asignatura"/>
+    <input name = "courseSearch" id = "courseSearch" class = "form-control form-control-lg" placeholder = "Curso"/>
+    <input name = "timeSearch" id = "timeSearch" class = "form-control form-control-lg" placeholder = "Horario"/>
+    <input name = "studSearch" id = "studSearch" class = "form-control form-control-lg" placeholder = "Nombre Alumno"/>
+
+    <input type="submit" value="Submit" class="btn btn-primary"/>
+  </form>
 
   <div class = "row d-flex py-4 justify-content-center">
     <table class="table table-bordered">
@@ -293,12 +305,13 @@
           <img class= "ps-1" src = "{% static 'images/save.png' %}" height = 20px>
         </button>
       </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
+      <!--<div class = "col-3 col-sm-auto ps-5 " >
         <button type="button" class="btn btn-lg" style="background-color: #00C4BA">
           Descargar
           <img class= "ps-1" src = "{% static 'images/download.png' %}" height = 20px>
         </button>
       </div>
+      -->
     </div>
   </form>
 </div>
