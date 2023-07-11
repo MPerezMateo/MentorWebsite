@@ -105,6 +105,6 @@ class Teacher(BaseUser, MonetaryUser):
     nidPhoto2 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
 
     def __str__(self):
-        return f"{self.id}, {self.name}, {self.nid}"
+        return f"{self.name}, {self.nid}"
 
 

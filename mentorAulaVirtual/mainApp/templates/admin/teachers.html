@@ -37,11 +37,11 @@
       <thead >
         <tr>
           <th scope="col">Nº</th>
-          <th scope="col">Id</th>
           <th scope="col">Nombre</th>
           <th scope="col">Apellidos</th>
           <th scope="col">Correo</th>
           <th scope="col">Teléfono</th>
+          <th scope="col">Asignaturas</th>
           <th scope="col">Modificar</th>
         </tr>
       </thead>
@@ -50,12 +50,11 @@
           {% for teacher in teachers%}
           <tr>
             <td>{{forloop.counter}}</td>
-            <td>{{teacher.id}}</td>
             <td>{{teacher.name}}</td>
             <td>{{teacher.surnames}}</td>
             <td>{{teacher.email}}</td>
             <td>{{teacher.phone}}</td>
-
+            <td>{{teacher.subjects}}</td>
             <td>
               <a href="{% url 'editTeacher' teacher.id %}">
                 <i class='fas fa-2xl fa-edit'></i>
