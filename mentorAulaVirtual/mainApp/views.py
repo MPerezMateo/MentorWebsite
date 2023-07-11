@@ -39,10 +39,11 @@ def clients(request):
 @login_required
 def teachers(request):
     teachers = Teacher.objects.all()
+    print(teachers)
     staff = User.objects.values().filter(is_staff=True)
     searchName = request.GET.get("nameSearch")
     if searchName:
-      teachers = teachers.filter(name = searchName)
+      teachers = teachers.filter(name__contains = searchName)
     if request.method == 'GET':
         return render(request, 'admin/teachers.html', {'form': TeacherForm(), 'searchForm': TeacherSearchForm(), 'teachers': teachers, 'staff': staff})
     else:

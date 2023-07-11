@@ -1,9 +1,6 @@
 {% extends 'baseAdmin.html' %}
 {% load static %}
 
-{% block title %}Mentor Aula Virtual
-{% endblock %}
-
 {% block content %}
 
 {{ error }}
@@ -20,13 +17,19 @@
 
   <!-- Filtros -->
   <form method="GET">
-    <input name = "nameSearch" id = "nameSearch" class = "form-control form-control-lg" placeholder = "Nombre Profesor"/>
-    <input name = "subjSearch" id = "subjSearch" class = "form-control form-control-lg" placeholder = "Asignatura"/>
-    <input name = "courseSearch" id = "courseSearch" class = "form-control form-control-lg" placeholder = "Curso"/>
-    <input name = "timeSearch" id = "timeSearch" class = "form-control form-control-lg" placeholder = "Horario"/>
-    <input name = "studSearch" id = "studSearch" class = "form-control form-control-lg" placeholder = "Nombre Alumno"/>
+    <div class = "row d-flex pt-4 justify-content-center">
+      <input class="col-6" name = "nameSearch" id = "nameSearch" class = "form-control form-control-lg" placeholder = "Nombre Profesor"/>
+      <input class="col-6" name = "subjSearch" id = "subjSearch" class = "form-control form-control-lg" placeholder = "Asignatura"/>
+    </div>
+    <div class = "row d-flex justify-content-center">
+      <input class="col-6" name = "courseSearch" id = "courseSearch" class = "form-control form-control-lg" placeholder = "Curso"/>
+      <input class="col-6" name = "timeSearch" id = "timeSearch" class = "form-control form-control-lg" placeholder = "Horario"/>
+    </div> 
+    <div class = "row d-flex justify-content-center">
+      <input class="col-6" name = "studSearch" id = "studSearch" class = "form-control form-control-lg" placeholder = "Nombre Alumno"/>
+    </div> 
 
-    <input type="submit" value="Submit" class="btn btn-primary"/>
+    <input type="submit" value="Buscar" class="btn btn-primary"/>
   </form>
 
   <div class = "row d-flex py-4 justify-content-center">
