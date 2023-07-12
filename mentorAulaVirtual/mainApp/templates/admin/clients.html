@@ -27,7 +27,6 @@
       <thead >
         <tr>
           <th scope="col">Nº</th>
-          <th scope="col">Id</th>
           <th scope="col">Nombre</th>
           <th scope="col">Apellidos</th>
           <th scope="col">Correo</th>
@@ -36,18 +35,17 @@
         </tr>
       </thead>
       <tbody >
-          {% if teachers %}
-          {% for teacher in teachers%}
+          {% if clients %}
+          {% for client in clients%}
           <tr>
             <td>{{forloop.counter}}</td>
-            <td>{{teacher.id}}</td>
-            <td>{{teacher.name}}</td>
-            <td>{{teacher.surnames}}</td>
-            <td>{{teacher.email}}</td>
-            <td>{{teacher.phone}}</td>
+            <td>{{client.name}}</td>
+            <td>{{client.surnames}}</td>
+            <td>{{client.email}}</td>
+            <td>{{client.phone}}</td>
 
             <td>
-              <a href="{% url 'editTeacher' teacher.id %}">
+              <a href="{% url 'editClient' client.id %}">
                 <i class='fas fa-2xl fa-edit'></i>
               </a>
               </td>
@@ -152,17 +150,6 @@
       Contacto
     </div>
 
-    <
-
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Foto de Perfil
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="file" name="profilePic" accept="image/*" onchange="loadFile(event)">
-      </div>
-    </div>
-
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Contrato
@@ -174,44 +161,27 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Descripción
+        Observaciones
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
         <textarea  name = "descr"></textarea><!---->
       </div>
     </div>
 
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Foto de Perfil
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <img id="output" width="200"/>
-      </div>
-    </div>
-    <!-- Bloque 2 -->
-        
-    <div class = "row d-flex py-2 justify-content-center">
-      Perfil Profesor
-    </div>
+    <hr>
 
     <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Estudios
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input id = "studies" name = "studies" class = "form-control form-control-lg" placeholder = "Estudios"/>
-      </div>
+      General
     </div>
 
+    
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Asignaturas
+        Origen
       </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <strong>Elige asignaturas:</strong>
-        <select class="form-select" multiple aria-label="multiple select example">
-          <option selected>Open this select menu</option>
+      <div class = "col-3 col-sm-auto ps-5" >
+        <select name=category class="form-select" aria-label="Default select example">
+          <option value="Potencial">Potencial</option>
           <option value="1">One</option>
           <option value="2">Two</option>
           <option value="3">Three</option>
@@ -221,22 +191,36 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Especialidad
+        Observaciones Cliente
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea name = "notes"></textarea>
-      </div>
-    </div>
-    
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Objetivo de horas semanales
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="estHours" id="estHours"> <!--required  -->
+        <input id = "ObsCliente" name = "ObsCliente" class = "form-control form-control-lg" placeholder = "Obs Cliente"/>
       </div>
     </div>
 
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Fecha de Entrada
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="date" id="enterDate" name="enterDate" class = "form-control form-control-lg">
+      </div>
+    </div>
+    
+    <hr>
+    
+    <div class = "row d-flex py-2 justify-content-center">
+      Alumno
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Nombre
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input id = "ObsCliente" name = "ObsCliente" class = "form-control form-control-lg" placeholder = "Obs Cliente"/>
+      </div>
+    </div>
     <div class = "row d-flex py-5 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5 " >
         <button type="submit" class="btn btn-lg" style="background-color: #00C4BA">
@@ -260,5 +244,7 @@
       var image = document.getElementById('output');
       image.src=URL.createObjectURL(event.target.files[0]);
   };
+  document.getElementById('enterDate').valueAsDate = new Date();
+
 </script>
 {% endblock content %}

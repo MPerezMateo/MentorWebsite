@@ -51,12 +51,17 @@ class BaseUser(models.Model):
     active = models.BooleanField(default=True)
     extra = models.CharField(null=True, blank=True, max_length=255)
     createdAt = models.DateTimeField(auto_now_add=True)
+    descr = models.CharField(null=True, blank=True, max_length=255)
 
     class Meta:
         abstract = True
 
 class MonetaryUser(models.Model):
-    
+    def file_upload_to(self, instance=None):
+        if instance:
+            return os.path.join('uploads', self.nid, instance)
+        return None
+
     phone = models.CharField(null=False, blank=False,
                              max_length=9, unique=True)
     email = models.EmailField(
@@ -65,6 +70,8 @@ class MonetaryUser(models.Model):
     nid = models.CharField(max_length=9, null=False, blank=False, unique=True)
     bankAccount = models.CharField(null=True, blank=True, max_length=40)
     bicSwift = models.CharField(null=True, blank=True, max_length=20)
+    contract = models.FileField(upload_to=file_upload_to, null=True, blank=True)
+
     class Meta:
         abstract = True
 
@@ -73,18 +80,14 @@ class Student(BaseUser):
 
 class Client(BaseUser, MonetaryUser):
     origin = models.CharField(max_length=20)
-    students = models.ForeignKey(Student, on_delete=models.DO_NOTHING,)
+    students = models.ForeignKey(Student,null=True, on_delete=models.DO_NOTHING,)
 
 class Teacher(BaseUser, MonetaryUser):
-
     def file_upload_to(self, instance=None):
-        if instance:
-            return os.path.join('uploads', self.nid, instance)
-        return None
+        return MonetaryUser.file_upload_to(self, instance)
 
     yearBirth = models.PositiveSmallIntegerField(blank=True, null=True)
     
-    descr = models.CharField(null=True, blank=True, max_length=255)
     studies = models.CharField(null=True, blank=True, max_length=255)
     xpYears = models.PositiveSmallIntegerField(default=0)
     estHours = models.PositiveSmallIntegerField(default=0)
@@ -98,9 +101,8 @@ class Teacher(BaseUser, MonetaryUser):
     creator = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, related_name='creator')
     category = models.CharField(null=True, blank=True, max_length=40)
-    students = models.ManyToManyField(Student)
+    students = models.ManyToManyField(Student, null=True)
     # calendarId
-    contract = models.FileField(upload_to=file_upload_to, null=True, blank=True)
     nidPhoto1 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
     nidPhoto2 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
 

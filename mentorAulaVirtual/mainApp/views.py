@@ -4,8 +4,8 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from .models import Teacher
-from .forms import TeacherForm, TeacherSearchForm
+from .models import Teacher, Client, Student
+from .forms import TeacherForm, TeacherSearchForm, ClientForm
 
 
 def loginUser(request):
@@ -24,22 +24,28 @@ def loginUser(request):
 
 @login_required
 def clients(request):
+    clients = Client.objects.all()
+    print(clients)
     if request.method == 'GET':
-        return render(request, 'admin/clients.html', {'form': AuthenticationForm()})
+        return render(request, 'admin/clients.html', {'form': AuthenticationForm(), 'searchForm': TeacherSearchForm(), 'clients': clients})
     else:
-        user = authenticate(
-            request, username=request.POST['username'], password=request.POST['password'])
-        if user is None:
-            return render(request, 'admin/clients.html', {'form': AuthenticationForm(), 'error': 'Nombre de usuario y contraseña no coinciden'})
-        else:
-            login(request, user)
-            return redirect('loginUser')
+        try:
+            form = ClientForm(request.POST, request.FILES)
+            for key, value in dict(request.POST).items(): print(key, '-> ', value)
+            newClient = form.save(commit=False)
+            newClient.creator = request.user
+            newClient.save()
+            return redirect('clients')
+        except Exception as e:
+            print(e)
+            return render(request, 'admin/clients.html', {'form': form, 'teachers': teachers, 'error': 'Datos inválidos en el formulario de cliente. Asegúrate de que todos los campos estén cumplimentados y que el cliente no se encuentre ya en el sistema'})
+
+        
 
 
 @login_required
 def teachers(request):
     teachers = Teacher.objects.all()
-    print(teachers)
     staff = User.objects.values().filter(is_staff=True)
     searchName = request.GET.get("nameSearch")
     if searchName:
@@ -56,7 +62,7 @@ def teachers(request):
             return redirect('teachers')
         except Exception as e:
             print(e)
-            return render(request, 'admin/teachers.html', {'form': form, 'staff': staff, 'teachers': teachers, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y el profesor no se encuentre en el sistema'})
+            return render(request, 'admin/teachers.html', {'form': form, 'staff': staff, 'teachers': teachers, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y que el profesor no se encuentre ya en el sistema'})
 
 
 @login_required
@@ -97,3 +103,20 @@ def deleteTeacher(request, teacher_id):
         return redirect('teachers')
     else:
         return render(request, 'admin/teacherEdit.html', {'teacher': teacher})
+
+@login_required
+def editClient(request, client_id):
+    teacher = get_object_or_404(Teacher, pk=teacher_id)
+    staff = User.objects.values().filter(is_staff=True)
+    if request.method == 'GET':
+        form = TeacherForm(instance=teacher)
+        return render(request, 'admin/teacherEdit.html', {'teacher': teacher,'staff':staff, 'form': form})
+
+    else:
+        try:
+            form = TeacherForm(request.POST, instance=teacher)
+            form.save()
+            
+            return redirect('teachers')
+        except ValueError:
+            return render(request, 'admin/teacherEdit.html', {'teacher': teacher,'staff':staff, 'form': form, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y el profesor no se encuentre en el sistema'})
