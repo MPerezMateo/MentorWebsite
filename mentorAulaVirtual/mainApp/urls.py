@@ -15,4 +15,7 @@ urlpatterns = [
          views.editTeacher, name='editTeacher'),
     path('deleteTeacher/<uuid:teacher_id>/',
          views.deleteTeacher, name='deleteTeacher'),
+    path("students", views.students, name="students"),
+    path('editStudent/<uuid:student_id>/',
+         views.editStudent, name='editStudent'),
 ]

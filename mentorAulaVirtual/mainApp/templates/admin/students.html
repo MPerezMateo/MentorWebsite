@@ -11,25 +11,15 @@
       <img src = "{% static 'images/teacherIcon.png' %}" height = 50px>
     </div>
     <div class = "col-10 col-sm-auto d-flex align-items-center">
-      <h3>Profesores</h3>
+      <h3>Alumnos</h3>
     </div>
   </div>
 
   <!-- Filtros -->
   <form method="GET">
     <div class = "row d-flex pt-4 justify-content-center">
-      <input class="col-6" name = "nameSearch" id = "nameSearch" class = "form-control form-control-lg" placeholder = "Nombre Profesor"/>
-      <input class="col-6" name = "subjSearch" id = "subjSearch" class = "form-control form-control-lg" placeholder = "Asignatura"/>
+      <input class="col-6" name = "nameSearch" id = "nameSearch" class = "form-control form-control-lg" placeholder = "Nombre Cliente"/>
     </div>
-    <div class = "row d-flex justify-content-center">
-      <input class="col-6" name = "courseSearch" id = "courseSearch" class = "form-control form-control-lg" placeholder = "Curso"/>
-      <input class="col-6" name = "timeSearch" id = "timeSearch" class = "form-control form-control-lg" placeholder = "Horario"/>
-    </div> 
-    <div class = "row d-flex justify-content-center">
-      <input class="col-6" name = "studSearch" id = "studSearch" class = "form-control form-control-lg" placeholder = "Nombre Alumno"/>
-    </div> 
-
-    <input type="submit" value="Buscar" class="btn btn-primary"/>
   </form>
 
   <div class = "row d-flex py-4 justify-content-center">
@@ -41,28 +31,21 @@
           <th scope="col">Apellidos</th>
           <th scope="col">Correo</th>
           <th scope="col">Teléfono</th>
-          <th scope="col">Asignaturas</th>
           <th scope="col">Modificar</th>
         </tr>
       </thead>
       <tbody >
-          {% if teachers %}
-          {% for teacher in teachers%}
+          {% if students %}
+          {% for student in students%}
           <tr>
             <td>{{forloop.counter}}</td>
-            <td>{{teacher.name}}</td>
-            <td>{{teacher.surnames}}</td>
-            <td>{{teacher.email}}</td>
-            <td>{{teacher.phone}}</td>
+            <td>{{student.name}}</td>
+            <td>{{student.surnames}}</td>
+            <td>{{student.email}}</td>
+            <td>{{student.phone}}</td>
+
             <td>
-              {% if teacher.subjects %}
-              {% for subject in teacher.subjects.all %}
-              {{subject}}
-              {% endfor %}
-              {% endif %}
-            </td>
-            <td>
-              <a href="{% url 'editTeacher' teacher.id %}">
+              <a href="{% url 'editStudent' student.id %}">
                 <i class='fas fa-2xl fa-edit'></i>
               </a>
               </td>
@@ -75,7 +58,7 @@
   </div>
   <div style ="position: fixed; bottom: 40px; right: 40px;">
     <a class="btn text-white" style="background-color: #55acee;" role="button">  
-      Añadir Profesor
+      Añadir Alumno
       <i class="fas fa-plus"></i>
     </a>
   </div>
@@ -86,15 +69,10 @@
     <div class = "col ps-5" >
       <img src = "{% static 'images/teacherIcon.png' %}" height = 50px>
     </div>
-    <!--<div class = "col-4 d-flex align-items-center justify-content-center">
-      <a role="button">  
-        <h3>Perfil Cliente</h3>
-      </a>
-    </div>-->
     <div class = "col-4 d-flex align-items-center justify-content-center">
       <a role="button">  
-        <h3>Profesor</h3>
-      </a> 
+        <h3>Perfil Alumno</h3>
+      </a>
     </div>
     <div class = "col d-flex align-items-center justify-content-end px-5 ">
       <a role="button">  
@@ -109,33 +87,12 @@
 
     <!-- Bloque 1 -->
     <div class = "row d-flex py-2 justify-content-center">
-      Etiqueta
+      Perfil Alumno
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Administrador
-      </div>
-      <div class = "col-3 col-sm-auto ps-5" >
-        <select name="admin" class="form-select" aria-label="Default select example">
-          {% if staff %}
-          {% for admin in staff %}
-            <option value={{admin.id}}>{{admin.username}}</option>
-          {% endfor %}
-          {% endif %}
-        </select>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class = "row d-flex py-2 justify-content-center">
-      Perfil Registro
-    </div>
-
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Nombre profesor
+        Nombre
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
         <input name = "name" id = "name" class = "form-control form-control-lg" placeholder = "Paco" required/>
@@ -144,7 +101,7 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Apellidos profesor
+        Apellidos
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
         <input name = "surnames" id = "surnames" class = "form-control form-control-lg" placeholder = "Pérez Rordriguez" required/>
@@ -153,7 +110,7 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Teléfono profesor
+        Teléfono
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
         <input type="tel" id="phone" name="phone" placeholder="612345678" pattern="[0-9]{9}" required >
@@ -162,7 +119,7 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Correo electrónico
+        Correo
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
         <input type="email" name="email" id="email" placeholder="correo@gmail.com" required >
@@ -171,29 +128,26 @@
     
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Contraseña
+        Dirección
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="password" name="password" id="password" required>
+        <input type="text" name="address" id="address" placeholder="Calle X, Portal Y Piso Z Puerta W"> <!--required -->
       </div>
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Foto de Perfil
+        DNI
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="file" name="profilePic" accept="image/*" onchange="loadFile(event)">
+        <input type="text" name="nid" id="nid"  placeholder= "01234567A"><!--required -->
       </div>
     </div>
 
+    <hr> 
+
     <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Foto de Perfil
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <img id="output" width="200"/>
-      </div>
+      Contacto
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">
@@ -207,131 +161,66 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
+        Observaciones
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <textarea  name = "descr"></textarea><!---->
+      </div>
+    </div>
+
+    <hr>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      General
+    </div>
+
+    
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
         Origen
       </div>
       <div class = "col-3 col-sm-auto ps-5" >
-        <select name="origin" class="form-select" aria-label="Default select example">
-          {% if origin %}
-          {% for ori in origin %}
-            <option value={{ori.name}}>{{ori.name}}</option>
-          {% endfor %}
-          {% endif %}
+        <select name=category class="form-select" aria-label="Default select example">
+          <option value="Potencial">Potencial</option>
+          <option value="1">One</option>
+          <option value="2">Two</option>
+          <option value="3">Three</option>
         </select>
-      </div>
-    </div>
-    <!--<div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        DNI
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="text" name="nid" id="nid"  placeholder= "01234567A" required>
       </div>
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Dirección
+        Observaciones Alumno
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="text" name="address" id="address" placeholder="Calle X, Portal Y Piso Z Puerta W" required>
+        <input id = "ObsAlumno" name = "ObsAlumno" class = "form-control form-control-lg" placeholder = "Obs Cliente"/>
       </div>
     </div>
-    -->
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Fecha de Entrada
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="date" id="enterDate" name="enterDate" class = "form-control form-control-lg">
+      </div>
+    </div>
+    
     <hr>
+    
     <div class = "row d-flex py-2 justify-content-center">
-      Perfil Docente
-    </div>
-
-    <!--
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Descripción
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea  name = "descr"></textarea>
-      </div>
-    </div>
-    -->
-    <!-- Bloque 2 -->
-
-    <!-- <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Estudios
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input id = "studies" name = "studies" class = "form-control form-control-lg" placeholder = "Estudios"/>
-      </div>
-    </div>
-    -->
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Asignaturas
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <select class="selectpicker" multiple data-live-search="true" data-none-selected-text ="Escribe para buscar"> <!--name="subjects"  class="form-select" multiple class="chosen-select"-->
-          {% if subjects %}
-              {% for subject in subjects %}
-                <option value={{subject.name}}> {{subject.name}} </option>
-              {% endfor %}
-          {% endif %}
-        </select>
-      </div>
+      Alumno
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Especialidad
+        Nombre
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea name = "notes"></textarea>
+        <input id = "ObsCliente" name = "ObsCliente" class = "form-control form-control-lg" placeholder = "Obs Cliente"/>
       </div>
     </div>
-
-    <!-- <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Experiencia docente
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="text" name="xpYears" id="xpYears" required> 
-      </div>
-    </div> -->
-
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Objetivo de horas semanales
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="estHours" id="estHours"> <!--required  -->
-      </div>
-    </div>
-
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Disponibilidad
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea name = "notes" value = "Lunes\nMartes"required>Lunes:&#13;&#10;Martes:&#13;&#10;Miércoles:&#13;&#10;Jueves:&#13;&#10;Viernes:&#13;&#10;Sábado:&#13;&#10;Domingo:</textarea>
-      </div>
-    </div>
-
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Precios
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="estHours" id="estHours"> <!--required  -->
-      </div>
-    </div>
-
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Alumnos
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="estHours" id="estHours"> <!--required  -->
-      </div>
-    </div>
-
     <div class = "row d-flex py-5 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5 " >
         <button type="submit" class="btn btn-lg" style="background-color: #00C4BA">
@@ -355,5 +244,7 @@
       var image = document.getElementById('output');
       image.src=URL.createObjectURL(event.target.files[0]);
   };
+  document.getElementById('enterDate').valueAsDate = new Date();
+
 </script>
 {% endblock content %}

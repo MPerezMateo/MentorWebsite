@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from .models import Teacher, Client, Student
+from .models import Teacher, Client, Student, Subject, Origin
 from .forms import TeacherForm, TeacherSearchForm, ClientForm
 
 
@@ -45,20 +45,31 @@ def clients(request):
 
 @login_required
 def teachers(request):
-    teachers = Teacher.objects.all()
-    staff = User.objects.values().filter(is_staff=True)
     searchName = request.GET.get("nameSearch")
     if searchName:
       teachers = teachers.filter(name__contains = searchName)
     if request.method == 'GET':
-        return render(request, 'admin/teachers.html', {'form': TeacherForm(), 'searchForm': TeacherSearchForm(), 'teachers': teachers, 'staff': staff})
+        return render(request, 'admin/teachers.html',
+         {'form': TeacherForm(), 
+         'searchForm': TeacherSearchForm(), 
+         'teachers': Teacher.objects.all(),
+         'staff':  User.objects.values().filter(is_staff=True), 
+         'subjects': Subject.objects.all(),
+         'origins': Origin.objects.all()
+         })
     else:
         try:
             form = TeacherForm(request.POST, request.FILES)
-            for key, value in dict(request.POST).items(): print(key, '-> ', value)
+            #for key, value in dict(request.POST).items(): print(key, '-> ', value)
             newTeacher = form.save(commit=False)
             newTeacher.creator = request.user
             newTeacher.save()
+            
+            user = User.objects.create_user(username = request.POST["nid"],
+                                            first_name = request.POST["name"],
+                                            last_name = request.POST["surnames"],
+                                            email = request.POST["email"],
+                                            password = request.POST["password"])
             return redirect('teachers')
         except Exception as e:
             print(e)
@@ -120,3 +131,25 @@ def editClient(request, client_id):
             return redirect('teachers')
         except ValueError:
             return render(request, 'admin/teacherEdit.html', {'teacher': teacher,'staff':staff, 'form': form, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y el profesor no se encuentre en el sistema'})
+
+@login_required
+def students(request):
+    students = Student.objects.all()
+    print(students)
+    if request.method == 'GET':
+        return render(request, 'admin/students.html', {'form': AuthenticationForm(), 'searchForm': TeacherSearchForm(), 'students': students})
+    else:
+        try:
+            form = ClientForm(request.POST, request.FILES)
+            for key, value in dict(request.POST).items(): print(key, '-> ', value)
+            newClient = form.save(commit=False)
+            newClient.creator = request.user
+            newClient.save()
+            return redirect('students')
+        except Exception as e:
+            print(e)
+            return render(request, 'admin/students.html', {'form': form, 'teachers': teachers, 'error': 'Datos inválidos en el formulario de cliente. Asegúrate de que todos los campos estén cumplimentados y que el cliente no se encuentre ya en el sistema'})
+
+@login_required
+def editStudent(request):
+  return redirect('students')
