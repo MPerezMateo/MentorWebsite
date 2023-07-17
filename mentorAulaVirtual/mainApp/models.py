@@ -72,7 +72,7 @@ class Student(BaseUser):
 
 class Client(BaseUser, MonetaryUser):
     origin = models.CharField(max_length=20)
-    students = models.ForeignKey(Student,null=True, on_delete=models.DO_NOTHING,)
+    students = models.ForeignKey(Student, null=True, on_delete=models.DO_NOTHING,)
 
 class Teacher(BaseUser, MonetaryUser):
     def file_upload_to(self, instance=None):
@@ -97,7 +97,10 @@ class Teacher(BaseUser, MonetaryUser):
     # calendarId
     nidPhoto1 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
     nidPhoto2 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
-
+    origin = models.ForeignKey(Origin, null=True, on_delete=models.DO_NOTHING)
+    prices = models.CharField(null=True, blank=True, max_length=150)
+    availability = models.CharField(null=True, blank=True, max_length=150)
+    
     def __str__(self):
         return f"{self.name}, {self.nid}"
 

@@ -18,15 +18,12 @@
   <!-- Filtros -->
   <form method="GET">
     <div class = "row d-flex pt-4 justify-content-center">
-      <input class="col-6" name = "nameSearch" id = "nameSearch" class = "form-control form-control-lg" placeholder = "Nombre Profesor"/>
+      <input class="col-6" name = "teacherSearch" id = "teacherSearch" class = "form-control form-control-lg" placeholder = "Nombre Profesor"/>
       <input class="col-6" name = "subjSearch" id = "subjSearch" class = "form-control form-control-lg" placeholder = "Asignatura"/>
     </div>
     <div class = "row d-flex justify-content-center">
-      <input class="col-6" name = "courseSearch" id = "courseSearch" class = "form-control form-control-lg" placeholder = "Curso"/>
-      <input class="col-6" name = "timeSearch" id = "timeSearch" class = "form-control form-control-lg" placeholder = "Horario"/>
-    </div> 
-    <div class = "row d-flex justify-content-center">
       <input class="col-6" name = "studSearch" id = "studSearch" class = "form-control form-control-lg" placeholder = "Nombre Alumno"/>
+      <input class="col-6" name = "timeSearch" id = "timeSearch" class = "form-control form-control-lg" placeholder = "Horario"/>
     </div> 
 
     <input type="submit" value="Buscar" class="btn btn-primary"/>
@@ -268,7 +265,7 @@
         Asignaturas
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <select class="selectpicker" multiple data-live-search="true" data-none-selected-text ="Escribe para buscar"> <!--name="subjects"  class="form-select" multiple class="chosen-select"-->
+        <select name="subjects" class="selectpicker" multiple data-live-search="true" data-none-selected-text ="Escribe para buscar"> <!--name="subjects"  class="form-select" multiple class="chosen-select"-->
           {% if subjects %}
               {% for subject in subjects %}
                 <option value={{subject.name}}> {{subject.name}} </option>
@@ -305,12 +302,12 @@
       </div>
     </div>
 
-    <div class = "row d-flex py-2 justify-content-center">
+    <div class = "row d-flex py-2 justify-content-center h-100">
       <div class = "col-3 col-sm-auto ps-5" >
         Disponibilidad
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea name = "notes" value = "Lunes\nMartes"required>Lunes:&#13;&#10;Martes:&#13;&#10;Miércoles:&#13;&#10;Jueves:&#13;&#10;Viernes:&#13;&#10;Sábado:&#13;&#10;Domingo:</textarea>
+        <textarea name = "availability" style="height: 185px;" required>Lunes: &#13;&#10;Martes: &#13;&#10;Miércoles: &#13;&#10;Jueves: &#13;&#10;Viernes: &#13;&#10;Sábado: &#13;&#10;Domingo: </textarea>
       </div>
     </div>
 
@@ -319,7 +316,7 @@
         Precios
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="estHours" id="estHours"> <!--required  -->
+        <textarea name = "prices" style="height: 135px;" required>ESO: 16.6 € / h&#13;&#10;Bachiller: 18 € / h&#13;&#10;Universidad: 20 € / h&#13;&#10;Bachiller: 18 € / h&#13;&#10;Premium: 25 € / h </textarea>
       </div>
     </div>
 
@@ -328,7 +325,13 @@
         Alumnos
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="estHours" id="estHours"> <!--required  -->
+        <select name="students" class="selectpicker" multiple data-live-search="true" data-none-selected-text ="Escribe para buscar"> <!--name="subjects"  class="form-select" multiple class="chosen-select"-->
+          {% if students %}
+              {% for student in students %}
+                <option value={{student.nid}}>{{student.name}} {{student.surnames}}</option>
+              {% endfor %}
+          {% endif %}
+        </select>
       </div>
     </div>
 

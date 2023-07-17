@@ -45,14 +45,22 @@ def clients(request):
 
 @login_required
 def teachers(request):
-    searchName = request.GET.get("nameSearch")
-    if searchName:
-      teachers = teachers.filter(name__contains = searchName)
+    teacherSearch = request.GET.get("teacherSearch")
+    subjSearch = request.GET.get("subjSearch")
+    timeSearch = request.GET.get("timeSearch")
+    studSearch = request.GET.get("studSearch")
+    teachers = Teacher.objects.all()
+    # Aplicamos filtros
+    if teacherSearch: teachers = teachers.filter(name__contains = teacherSearch)
+    if subjSearch: teachers = teachers.filter(subjects__name__contains = subjSearch)
+    
     if request.method == 'GET':
         return render(request, 'admin/teachers.html',
-         {'form': TeacherForm(), 
+         {
+         'form': TeacherForm(), 
          'searchForm': TeacherSearchForm(), 
-         'teachers': Teacher.objects.all(),
+         'teachers': teachers,
+         'students': Student.objects.all(),
          'staff':  User.objects.values().filter(is_staff=True), 
          'subjects': Subject.objects.all(),
          'origins': Origin.objects.all()

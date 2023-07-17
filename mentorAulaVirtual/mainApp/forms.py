@@ -8,10 +8,10 @@ class TeacherForm(ModelForm):
 
   class Meta:
     model = Teacher
-    fields = ['admin','name','surnames','phone', 'email', 'nid', 'address',
-       'profilePic', 'contract', 'descr', 'studies','xpYears', 'estHours']
-       #'category'
-
+    fields = ['admin','name','surnames','phone', 'email', 'profilePic',
+      'contract', 'origin','subjects', 'estHours', 'availability', 'prices',
+      'students']
+      
 class TeacherSearchForm(forms.Form):
   nameSearch = forms.CharField()
   subjSearch = forms.CharField()
