@@ -1,0 +1,248 @@
+{% extends 'baseAdmin.html' %}
+{% block title %}Mentor Aula Virtual
+{% endblock %}
+
+{% block content %}
+{% load static %}
+
+{{ error }}
+
+<div class = "container py-3 border border-primary border-3 rounded" style= "border-color: #55acee;">
+  <div class = "row">
+    <div class = "col ps-5" >
+      <img src = "{% static 'images/teacherIcon.png' %}" height = 50px>
+    </div>
+    <!--<div class = "col-4 d-flex align-items-center justify-content-center">
+      <a role="button">  
+        <h3>Perfil Cliente</h3>
+      </a>
+    </div>-->
+    <div class = "col-4 d-flex align-items-center justify-content-center">
+      <a role="button">  
+        <h3>Profesor</h3>
+      </a> 
+    </div>
+    <div class = "col d-flex align-items-center justify-content-end px-5 ">
+      <a role="button" href = "{% url 'teachers' %}">  
+        <i class="fa fa-2xl fa-times"></i>
+      </a>
+    </div>
+  </div>
+  <hr> <!-- Linea divisioria-->
+  <!-- Empieza el formulario -->
+  <form method = "POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <!-- Bloque 1 -->
+    <div class = "row d-flex py-2 justify-content-center">
+      Etiqueta
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Administrador
+      </div>
+      <div class = "col-3 col-sm-auto ps-5" >
+        <select name="admin" class="form-select" aria-label="Default select example">
+          {% if staff %}
+          {% for admin in staff %}
+            <option value={{admin.id}}>{{admin.username}}</option>
+          {% endfor %}
+          {% endif %}
+        </select>
+      </div>
+    </div>
+
+    <hr>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      Perfil Registro
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Nombre profesor
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input name = "name" id = "name" class = "form-control form-control-lg" placeholder = "Paco" required/>
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Apellidos profesor
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input name = "surnames" id = "surnames" class = "form-control form-control-lg" placeholder = "Pérez Rordriguez" required/>
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Teléfono profesor
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="tel" id="phone" name="phone" placeholder="612345678" pattern="[0-9]{9}" required >
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Correo electrónico
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="email" name="email" id="email" placeholder="correo@gmail.com" required >
+      </div>
+    </div>
+    
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Contraseña
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="password" name="password" id="password" required>
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Foto de Perfil
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="file" name="profilePic" accept="image/*" onchange="loadFile(event)">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Foto de Perfil
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <img id="output" width="200"/>
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Contrato
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="file" name="contract" accept="application/pdf">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Origen
+      </div>
+      <div class = "col-3 col-sm-auto ps-5" >
+        <select name="origin" class="form-select" aria-label="Default select example">
+          {% if origins %}
+          {% for origin in origins %}
+            <option value={{origin.name}}>{{origin.name}}</option>
+          {% endfor %}
+          {% endif %}
+        </select>
+      </div>
+    </div>
+    
+    <hr>
+    <div class = "row d-flex py-2 justify-content-center">
+      Perfil Docente
+    </div>
+
+    <!-- Bloque 2 -->
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Asignaturas
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <select name="subjects" class="selectpicker" multiple data-live-search="true" data-none-selected-text ="Escribe para buscar">
+          {% if subjects %}
+              {% for subject in subjects %}
+                <option value={{subject.name}}> {{subject.name}} </option>
+              {% endfor %}
+          {% endif %}
+        </select>
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Especialidad
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <textarea name = "speciality"></textarea>
+      </div>
+    </div>
+
+    <!-- <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Experiencia docente
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="text" name="xpYears" id="xpYears" required> 
+      </div>
+    </div> -->
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Objetivo de horas semanales
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="number" name="estHours" id="estHours"> <!--required  -->
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center h-100">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Disponibilidad
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <textarea name = "availability" style="height: 185px;" required>Lunes: &#13;&#10;Martes: &#13;&#10;Miércoles: &#13;&#10;Jueves: &#13;&#10;Viernes: &#13;&#10;Sábado: &#13;&#10;Domingo: </textarea>
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Precios
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <textarea name = "prices" style="height: 135px;" required>ESO: 16.6 € / h&#13;&#10;Bachiller: 18 € / h&#13;&#10;Universidad: 20 € / h&#13;&#10;Bachiller: 18 € / h&#13;&#10;Premium: 25 € / h </textarea>
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Alumnos
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <select name="students" class="selectpicker" multiple data-live-search="true" data-none-selected-text ="Escribe para buscar">
+          {% if students %}
+              {% for student in students %}
+                <option value={{student.name}}>{{student.name}} {{student.surnames}}</option>
+              {% endfor %}
+          {% endif %}
+        </select>
+      </div>
+    </div>
+
+    <div class = "row d-flex py-5 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <button type="submit" class="btn btn-lg" style="background-color: #00C4BA">
+          Guardar
+          <img class= "ps-1" src = "{% static 'images/save.png' %}" height = 20px>
+        </button>
+      </div>
+      <!--<div class = "col-3 col-sm-auto ps-5 " >
+        <button type="button" class="btn btn-lg" style="background-color: #00C4BA">
+          Descargar
+          <img class= "ps-1" src = "{% static 'images/download.png' %}" height = 20px>
+        </button>
+      </div>
+      -->
+    </div>
+  </form>
+</div>
+{% endblock content %}

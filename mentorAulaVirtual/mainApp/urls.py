@@ -11,6 +11,8 @@ urlpatterns = [
     #path('deleteClient/<uuid:client_id>/',
     #     views.deleteClient, name='deleteClient'),
     path("teachers", views.teachers, name="teachers"),
+    path('createTeacher',
+         views.createTeacher, name='createTeacher'),
     path('editTeacher/<uuid:teacher_id>/',
          views.editTeacher, name='editTeacher'),
     path('deleteTeacher/<uuid:teacher_id>/',

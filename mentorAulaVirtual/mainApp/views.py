@@ -53,6 +53,8 @@ def teachers(request):
     # Aplicamos filtros
     if teacherSearch: teachers = teachers.filter(name__contains = teacherSearch)
     if subjSearch: teachers = teachers.filter(subjects__name__contains = subjSearch)
+    if timeSearch: teachers = teachers.filter(availability__contains = timeSearch)
+    if studSearch: teachers = teachers.filter(students__name__contains = studSearch)
     
     if request.method == 'GET':
         return render(request, 'admin/teachers.html',
@@ -65,23 +67,38 @@ def teachers(request):
          'subjects': Subject.objects.all(),
          'origins': Origin.objects.all()
          })
-    else:
-        try:
-            form = TeacherForm(request.POST, request.FILES)
-            #for key, value in dict(request.POST).items(): print(key, '-> ', value)
-            newTeacher = form.save(commit=False)
-            newTeacher.creator = request.user
-            newTeacher.save()
-            
-            user = User.objects.create_user(username = request.POST["nid"],
-                                            first_name = request.POST["name"],
-                                            last_name = request.POST["surnames"],
-                                            email = request.POST["email"],
-                                            password = request.POST["password"])
-            return redirect('teachers')
-        except Exception as e:
-            print(e)
-            return render(request, 'admin/teachers.html', {'form': form, 'staff': staff, 'teachers': teachers, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y que el profesor no se encuentre ya en el sistema'})
+
+@login_required
+def createTeacher(request):
+  if request.method == 'GET':
+    return render(request, 'admin/createTeacher.html')
+  
+  else:
+      try:
+        form = TeacherForm(request.POST, request.FILES)
+        for key, value in dict(request.POST).items(): print(key, '-> ', value)
+        newTeacher = form.save(commit=False)
+        newTeacher.creator = request.user
+        newTeacher.save()
+        user = User.objects.create_user(username = request.POST["nid"],
+                                        first_name = request.POST["name"],
+                                        last_name = request.POST["surnames"],
+                                        email = request.POST["email"],
+                                        password = request.POST["password"])
+        return redirect('teachers')
+      except Exception as e:
+        print(e)
+        return render(request, 'admin/teachers.html', 
+          {
+            'form': TeacherForm(), 
+            'searchForm': TeacherSearchForm(), 
+            'teachers': teachers,
+            'students': Student.objects.all(),
+            'staff':  User.objects.values().filter(is_staff=True), 
+            'subjects': Subject.objects.all(),
+            'origins': Origin.objects.all(),
+            'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y que el profesor no se encuentre ya en el sistema'
+          })
 
 
 @login_required
@@ -99,7 +116,7 @@ def editTeacher(request, teacher_id):
     staff = User.objects.values().filter(is_staff=True)
     if request.method == 'GET':
         form = TeacherForm(instance=teacher)
-        return render(request, 'admin/teacherEdit.html', {'teacher': teacher,'staff':staff, 'form': form})
+        return render(request, 'admin/editTeacher.html', {'teacher': teacher,'staff':staff, 'form': form})
 
     else:
         try:
@@ -108,7 +125,7 @@ def editTeacher(request, teacher_id):
             
             return redirect('teachers')
         except ValueError:
-            return render(request, 'admin/teacherEdit.html', {'teacher': teacher,'staff':staff, 'form': form, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y el profesor no se encuentre en el sistema'})
+            return render(request, 'admin/editTeacher.html', {'teacher': teacher,'staff':staff, 'form': form, 'error': 'Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y el profesor no se encuentre en el sistema'})
 
 
 @login_required

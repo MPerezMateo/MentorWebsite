@@ -2,6 +2,7 @@
 
 from django.db import migrations
 from ..data.subjects import subjects
+from ..data.origins import origins
 
 def cleanDb(apps, schema_editor):
   """Reiniciado de la base de datos"""
@@ -18,6 +19,7 @@ def populateDb(apps, schema_editor):
   Subject.objects.bulk_create(
     [ Subject(name = subject) for subject in subjects.split('\n') ]
   )
+  print([ origin for origin in origins.split('\n') ])
   Origin.objects.bulk_create(
     [ Origin(name = origin) for origin in origins.split('\n') ]
   )

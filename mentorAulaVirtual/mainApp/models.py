@@ -8,6 +8,8 @@ from django.utils.translation import gettext_lazy as _
 class Origin(models.Model):
   name = models.CharField(max_length=50, unique = True)
   # url = models.CharField(max_length=50, unique = True)
+  def __str__(self):
+    return self.name
 
 class Subject(models.Model):
   name = models.CharField(max_length=100, unique = True)
@@ -38,8 +40,9 @@ class BaseUser(models.Model):
     
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     #numId = models.AutoField()
-    name = models.CharField(max_length=50)
-    surnames = models.CharField(max_length=100)
+    name = models.CharField(max_length=30)
+    surnames = models.CharField(max_length=60)
+    fullname = models.CharField(max_length=90)
     active = models.BooleanField(default=True)
     extra = models.CharField(null=True, blank=True, max_length=255)
     createdAt = models.DateTimeField(auto_now_add=True)
@@ -47,6 +50,10 @@ class BaseUser(models.Model):
 
     class Meta:
         abstract = True
+      
+    def save(self, *args, **kwargs):
+      self.fullname = f"{self.name} {self.surnames}" 
+      super(BaseUser, self).save(*args, **kwargs)
 
 class MonetaryUser(models.Model):
     def file_upload_to(self, instance=None):
@@ -78,26 +85,25 @@ class Teacher(BaseUser, MonetaryUser):
     def file_upload_to(self, instance=None):
         return MonetaryUser.file_upload_to(self, instance)
 
-    yearBirth = models.PositiveSmallIntegerField(blank=True, null=True)
+    #yearBirth = models.PositiveSmallIntegerField(blank=True, null=True)
     
     studies = models.CharField(null=True, blank=True, max_length=255)
-    xpYears = models.PositiveSmallIntegerField(default=0)
+    workingXp = models.PositiveSmallIntegerField(default=0)
     estHours = models.PositiveSmallIntegerField(default=0)
     academyEmail = models.EmailField(
         null=True, blank=True, max_length=254, unique=True)
-    subjects = models.ForeignKey(Subject, on_delete=models.DO_NOTHING)
+    subjects = models.ManyToManyField(Subject, blank=True)
     profilePic = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
     
     admin = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, related_name='administrator')
     creator = models.ForeignKey(
         User, on_delete=models.DO_NOTHING, related_name='creator')
-    category = models.CharField(null=True, blank=True, max_length=40)
-    students = models.ManyToManyField(Student)
-    # calendarId
+    speciality = models.CharField(null=True, blank=True, max_length=40)
+    students = models.ManyToManyField(Student, blank=True)
     nidPhoto1 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
     nidPhoto2 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
-    origin = models.ForeignKey(Origin, null=True, on_delete=models.DO_NOTHING)
+    origin = models.ForeignKey(Origin, null=True, blank = True, on_delete=models.DO_NOTHING)
     prices = models.CharField(null=True, blank=True, max_length=150)
     availability = models.CharField(null=True, blank=True, max_length=150)
     

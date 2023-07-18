@@ -9,13 +9,12 @@ class TeacherForm(ModelForm):
   class Meta:
     model = Teacher
     fields = ['admin','name','surnames','phone', 'email', 'profilePic',
-      'contract', 'origin','subjects', 'estHours', 'availability', 'prices',
+      'contract', 'origin','subjects','speciality', 'estHours', 'availability', 'prices',
       'students']
       
 class TeacherSearchForm(forms.Form):
   nameSearch = forms.CharField()
   subjSearch = forms.CharField()
-  courseSearch = forms.CharField()
   timeSearch = forms.CharField()
   studSearch = forms.CharField()
 
