@@ -120,9 +120,7 @@ STATIC_URL = "static/"
 
 STATIC_ROOT = BASE_DIR / "static"
 
-STATICFILES_DIRS = [
-    BASE_DIR / "globalstatic"
-]
+STATICFILES_DIRS = [BASE_DIR / "globalstatic"]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
@@ -131,8 +129,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 INFO_EMAIL = "info@mentorclasesparticulares.com"
 
-LOGIN_URL = '/login'
+LOGIN_URL = "/login"
 
-MEDIA_ROOT = ''
+MEDIA_ROOT = ""
 
-MEDIA_URL = ''
+MEDIA_URL = ""

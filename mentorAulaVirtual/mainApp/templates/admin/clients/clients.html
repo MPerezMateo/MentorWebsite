@@ -1,0 +1,68 @@
+{% extends 'baseAdmin.html' %}
+{% load static %}
+
+{% block content %}
+
+{{ error }}
+
+<div class = "container py-5 vh-100">
+  <div class = "row d-flex justify-content-left">
+    <div class = "col-1 col-sm-auto">
+      <img src = "{% static 'images/teacherIcon.png' %}" height = 50px>
+    </div>
+    <div class = "col-10 col-sm-auto d-flex align-items-center">
+      <h3>Clientes</h3>
+    </div>
+  </div>
+
+  <!-- Filtros -->
+  <form method="GET">
+    <div class = "row d-flex pt-4 justify-content-center">
+      <input class="col-6" name = "nameSearch" id = "nameSearch" class = "form-control form-control-lg" placeholder = "Nombre Profesor"/>
+      <input class="col-6" name = "studSearch" id = "studSearch" class = "form-control form-control-lg" placeholder = "Alumno"/>
+    </div>
+    <input type="submit" value="Buscar" class="btn btn-primary"/>
+  </form>
+
+  <div class = "row d-flex py-4 justify-content-center">
+    <table class="table table-bordered">
+      <thead >
+        <tr>
+          <th scope="col">Nº</th>
+          <th scope="col">Nombre</th>
+          <th scope="col">Apellidos</th>
+          <th scope="col">Correo</th>
+          <th scope="col">Teléfono</th>
+          <th scope="col">Modificar</th>
+        </tr>
+      </thead>
+      <tbody >
+          {% if clients %}
+          {% for client in clients%}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{client.name}}</td>
+            <td>{{client.surnames}}</td>
+            <td>{{client.email}}</td>
+            <td>{{client.phone}}</td>
+
+            <td>
+              <a href="{% url 'editClient' client.id %}">
+                <i class='fas fa-2xl fa-edit'></i>
+              </a>
+              </td>
+          </tr>
+          {% endfor %}
+          {% endif %}
+      </tbody>
+    </table>
+
+  </div>
+  <div style ="position: fixed; bottom: 40px; right: 40px;">
+    <a href="{% url 'createClient' %}" class="btn text-white" style="background-color: #55acee;" role="button">  
+      Añadir Cliente
+      <i class="fas fa-plus"></i>
+    </a>
+  </div>
+</div>
+{% endblock content %}
