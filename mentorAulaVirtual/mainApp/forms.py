@@ -11,8 +11,8 @@ class TeacherForm(ModelForm):
         model = Teacher
         fields = [
             "admin",
-            "name",
-            "surnames",
+            "first_name",
+            "last_name",
             "phone",
             "email",
             "profilePic",
@@ -38,14 +38,13 @@ class ClientForm(ModelForm):
     class Meta:
         model = Client
         fields = [
-            "name",
-            "surnames",
+            "first_name",
+            "last_name",
             "phone",
             "email",
             "address",
             "nid",
             "contract",
-            "descr",
         ]
 
 
@@ -53,11 +52,10 @@ class ClientSearchForm(forms.Form):
     nameSearch = forms.CharField()
     studSearch = forms.CharField()
 
-
 class StudentForm(ModelForm):
     class Meta:
         model = Student
-        fields = ["name", "surnames", "descr"]
+        fields = ["first_name","last_name"]
 
 
 class StudentSearchForm(forms.Form):

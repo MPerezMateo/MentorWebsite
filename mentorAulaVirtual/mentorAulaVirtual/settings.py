@@ -134,3 +134,5 @@ LOGIN_URL = "/login"
 MEDIA_ROOT = ""
 
 MEDIA_URL = ""
+
+AUTH_USER_MODEL = 'mainApp.BaseUser'

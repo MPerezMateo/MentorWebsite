@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 
-from .models import Teacher, Client, Student, Subject, Origin
+from .models import BaseUser, Teacher, Client, Student, Subject, Origin 
 from .forms import (
     TeacherForm,
     TeacherSearchForm,
@@ -52,14 +52,16 @@ def logoutUser(request):
 
 @login_required
 def teachers(request):
+
     teacherSearch = request.GET.get("teacherSearch")
     subjSearch = request.GET.get("subjSearch")
     timeSearch = request.GET.get("timeSearch")
     studSearch = request.GET.get("studSearch")
     teachers = Teacher.objects.all()
+    print(teachers[0].id )
     # Aplicamos filtros
     if teacherSearch:
-        teachers = teachers.filter(name__contains=teacherSearch)
+        teachers = teachers.filter(first_name__contains=teacherSearch)
     if subjSearch:
         teachers = teachers.filter(subjects__name__contains=subjSearch)
     if timeSearch:
@@ -75,7 +77,7 @@ def teachers(request):
                 "searchForm": TeacherSearchForm(),
                 "teachers": teachers,
                 "students": Student.objects.all(),
-                "staff": User.objects.values().filter(is_staff=True),
+                "staff": BaseUser.objects.values().filter(is_staff=True),
                 "subjects": Subject.objects.all(),
                 "origins": Origin.objects.all(),
             },
@@ -95,10 +97,10 @@ def createTeacher(request):
             newTeacher = form.save(commit=False)
             newTeacher.creator = request.user
             newTeacher.save()
-            user = User.objects.create_user(
+            BaseUser = BaseUser.objects.create_user(
                 username=request.POST["nid"],
-                first_name=request.POST["name"],
-                last_name=request.POST["surnames"],
+                first_name=request.POST["first_name"],
+                last_name=request.POST["last_name"],
                 email=request.POST["email"],
                 password=request.POST["password"],
             )
@@ -113,7 +115,7 @@ def createTeacher(request):
                     "searchForm": TeacherSearchForm(),
                     "teachers": teachers,
                     "students": Student.objects.all(),
-                    "staff": User.objects.values().filter(is_staff=True),
+                    "staff": BaseUser.objects.values().filter(is_staff=True),
                     "subjects": Subject.objects.all(),
                     "origins": Origin.objects.all(),
                     "error": "Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y que el profesor no se encuentre ya en el sistema",
@@ -124,7 +126,7 @@ def createTeacher(request):
 @login_required
 def editTeacher(request, teacher_id):
     teacher = get_object_or_404(Teacher, pk=teacher_id)
-    staff = User.objects.values().filter(is_staff=True)
+    staff = BaseUser.objects.values().filter(is_staff=True)
     if request.method == "GET":
         form = TeacherForm(instance=teacher)
         return render(
@@ -188,7 +190,7 @@ def clients(request):
                 "searchForm": ClientSearchForm(),
                 "clients": clients,
                 "students": Student.objects.all(),
-                "staff": User.objects.values().filter(is_staff=True),
+                "staff": BaseUser.objects.values().filter(is_staff=True),
                 "subjects": Subject.objects.all(),
                 "origins": Origin.objects.all(),
             },
@@ -218,7 +220,7 @@ def createClient(request):
                     "searchForm": TeacherSearchForm(),
                     "teachers": teachers,
                     "students": Student.objects.all(),
-                    "staff": User.objects.values().filter(is_staff=True),
+                    "staff": BaseUser.objects.values().filter(is_staff=True),
                     "subjects": Subject.objects.all(),
                     "origins": Origin.objects.all(),
                     "error": "Datos inválidos en el formulario de cliente. Asegúrate de que todos los campos estén cumplimentados y que el profesor no se encuentre ya en el sistema",
@@ -229,7 +231,7 @@ def createClient(request):
 @login_required
 def editClient(request, client_id):
     client = get_object_or_404(Client, pk=client_id)
-    staff = User.objects.values().filter(is_staff=True)
+    staff = BaseUser.objects.values().filter(is_staff=True)
     if request.method == "GET":
         form = ClientForm(instance=client)
         return render(
@@ -278,7 +280,7 @@ def students(request):
                 "searchForm": StudentSearchForm(),
                 "clients": clients,
                 "students": Student.objects.all(),
-                "staff": User.objects.values().filter(is_staff=True),
+                "staff": BaseUser.objects.values().filter(is_staff=True),
                 "subjects": Subject.objects.all(),
                 "origins": Origin.objects.all(),
             },
@@ -308,7 +310,7 @@ def createStudent(request):
                     "searchForm": TeacherSearchForm(),
                     "teachers": teachers,
                     "students": Student.objects.all(),
-                    "staff": User.objects.values().filter(is_staff=True),
+                    "staff": BaseUser.objects.values().filter(is_staff=True),
                     "subjects": Subject.objects.all(),
                     "origins": Origin.objects.all(),
                     "error": "Datos inválidos en el formulario de cliente. Asegúrate de que todos los campos estén cumplimentados y que el profesor no se encuentre ya en el sistema",
@@ -319,7 +321,7 @@ def createStudent(request):
 @login_required
 def editStudent(request, student_id):
     student = get_object_or_404(Student, pk=student_id)
-    staff = User.objects.values().filter(is_staff=True)
+    staff = BaseUser.objects.values().filter(is_staff=True)
     if request.method == "GET":
         form = StudentForm(instance=student)
         return render(
