@@ -18,7 +18,7 @@
       </a>
     </div>
     <div class = "col d-flex align-items-center justify-content-end px-5 ">
-      <a role="button">  
+      <a role="button" href="{% url 'students' %}">  
         <i class="fa fa-2xl fa-times"></i>
       </a>
     </div>
@@ -53,53 +53,52 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Teléfono
+        Curso
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="tel" id="phone" name="phone" placeholder="612345678" pattern="[0-9]{9}" required >
+        <input type="text" id="course" name="course" placeholder="">
       </div>
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Correo
+        Evaluación
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="email" name="email" id="email" placeholder="correo@gmail.com" required >
+        <input type="text" name="eval" id="eval" placeholder="correo@gmail.com" required >
       </div>
     </div>
     
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        Dirección
+        Nº de Clases Semanales
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="text" name="address" id="address" placeholder="Calle X, Portal Y Piso Z Puerta W"> <!--required -->
+        <input type="numeric" name="nWeeklyClasses" id="nWeeklyClasses" placeholder="Calle X, Portal Y Piso Z Puerta W"> <!--required -->
       </div>
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
-        DNI
+        Observaciones
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="text" name="nid" id="nid"  placeholder= "01234567A"><!--required -->
+        <input type="text" name="observ" id="observ"  placeholder= "01234567A"><!--required -->
       </div>
     </div>
 
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Objetivos
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input type="text" name="goal" id="goal"  placeholder= "01234567A"><!--required -->
+      </div>
+    </div>
     <hr> 
 
     <div class = "row d-flex py-2 justify-content-center">
       Contacto
-    </div>
-
-    <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Contrato
-      </div>
-      <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="file" name="contract" accept="application/pdf">
-      </div>
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">

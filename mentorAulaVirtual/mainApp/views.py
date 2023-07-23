@@ -58,7 +58,7 @@ def teachers(request):
     subjSearch = request.GET.get("subjSearch")
     timeSearch = request.GET.get("timeSearch")
     studSearch = request.GET.get("studSearch")
-    teachers = Teacher.objects.all()
+    teachers = Teacher.objects.filter(is_active = True)
     # Aplicamos filtros
     if teacherSearch:
         teachers = teachers.filter(first_name__contains=teacherSearch)
@@ -153,7 +153,8 @@ def deleteTeacher(request, teacher_id):
     teacher = get_object_or_404(Teacher, pk=teacher_id)
     print(request.method)
     if request.method == "GET":
-        teacher.delete()
+        teacher.is_active = False
+        teacher.save()
         return redirect("teachers")
     else:
         return render(request, "admin/teachers/teacherEdit.html", {"teacher": teacher})

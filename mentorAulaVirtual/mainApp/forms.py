@@ -40,7 +40,6 @@ class ClientForm(ModelForm):
             "email",
             "address",
             "nid",
-            "contract",
         ]
 
 

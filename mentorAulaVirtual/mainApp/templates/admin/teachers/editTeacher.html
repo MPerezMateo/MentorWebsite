@@ -290,16 +290,32 @@
           <img class= "ps-1" src = "{% static 'images/save.png' %}" height = 20px>
         </button>
       </div>
-
+      <!-- -->
       <div class = "col-3 col-sm-auto ps-5 " >
-        <a href ="{% url 'deleteTeacher' teacher.id %}" type="button" class="btn btn-lg" style="background-color: #00C4BA">
+        <button type="button" class="btn btn-lg" data-toggle="modal" data-target="#exampleModal" type="button"  style="background-color: #00C4BA">
           Borrar
           <img class= "ps-1" src = "{% static 'images/download.png' %}" height = 20px>
-        </a>
+        </button>
       </div>
     </div>
   </form>
 </div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        ¿Seguro que quieres desactivar este profesor? No podrá dar clases ni acceder al sistema.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+        <a type="button" href ="{% url 'deleteTeacher' teacher.id %}" class="btn btn-primary">Eliminar profesor</a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   var loadFile = function(event) {
       var image = document.getElementById('output');

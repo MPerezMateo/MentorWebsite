@@ -64,28 +64,38 @@ class MonetaryUser(models.Model):
         return None
 
     phone = models.CharField(null=False, blank=False, max_length=9, unique=True)
-    email = models.EmailField(max_length=254, null=False, blank=False, unique=True)
     address = models.CharField(null=True, blank=True, max_length=255)
     nid = models.CharField(max_length=9, null=True, blank=True, unique=True)
     bankName = models.CharField(null=True, blank=True, max_length=40)
     bankAccount = models.CharField(null=True, blank=True, max_length=40)
     bicSwift = models.CharField(null=True, blank=True, max_length=20)
-    contract = models.FileField(upload_to=file_upload_to, null=True, blank=True)
     dpLaw = models.BooleanField(default=False)
-    validated = models.BooleanField(default=False)
+    origin = models.ForeignKey(
+        Origin, null=True, blank=True, on_delete=models.DO_NOTHING
+    )
 
     class Meta:
         abstract = True
 
 
 class Student(BaseUser):
-    pass
+    def file_upload_to(self, instance=None):
+        return MonetaryUser.file_upload_to(self, instance)
+
+    course = models.CharField(null=True, blank=True, max_length=40)
+    subjects = models.ForeignKey(Subject, null=True, blank=True, on_delete=models.DO_NOTHING )
+    weeklyHours = models.FloatField(default=0)
+    availability = models.CharField(null=True, blank=True, max_length=150, default= "Lunes: \nMartes: \nMiércoles: \nJueves: \nViernes: \nSábado: \nDomingo: ")
+    #initialDate = models.DateField
+    hourlyPrice = models.FloatField(default=15)
+    eval = models.CharField(null=True, blank=True, max_length=200)
+    profilePic = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
+
     class Meta:
         verbose_name = "Student" # Aparecen mejor en el menu del admin
         verbose_name_plural = "Students"
 
 class Client(BaseUser, MonetaryUser):
-    origin = models.CharField(max_length=20)
     students = models.ForeignKey(
         Student,
         null=True,
@@ -100,7 +110,9 @@ class Teacher(BaseUser, MonetaryUser):
         return MonetaryUser.file_upload_to(self, instance)
 
     # yearBirth = models.PositiveSmallIntegerField(blank=True, null=True)
-
+    contract = models.FileField(upload_to=file_upload_to, null=True, blank=True)
+    validated = models.BooleanField(default=False)
+    
     studies = models.CharField(null=True, blank=True, max_length=255)
     workingXp = models.PositiveSmallIntegerField(default=0)
     estHours = models.PositiveSmallIntegerField(default=0)
@@ -116,9 +128,7 @@ class Teacher(BaseUser, MonetaryUser):
     students = models.ManyToManyField(Student, blank=True)
     nidPhoto1 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
     nidPhoto2 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
-    origin = models.ForeignKey(
-        Origin, null=True, blank=True, on_delete=models.DO_NOTHING
-    )
+    
     prices = models.CharField(null=True, blank=True, max_length=2000, default="ESO: 16.6 € / h\nBachiller: 18 € / h\nUniversidad: 20 € / h\nBachiller: 18 € / h\nPremium: 25 € / h")
     availability = models.CharField(null=True, blank=True, max_length=150, default= "Lunes: \nMartes: \nMiércoles: \nJueves: \nViernes: \nSábado: \nDomingo: ")
 
