@@ -45,14 +45,7 @@ class Availability(models.Model):
 class BaseUser(AbstractUser):
     # id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # numId = models.AutoField()
-    # Usar Firstname y last_name de AbstractUser
-    #name = models.CharField(max_length=30)
-    #surnames = models.CharField(max_length=60)
-    fullname = models.CharField(max_length=90)
-    #Usar active
-    #active = models.BooleanField(default=True)
-    #Usar jonedAt
-    #createdAt = models.DateTimeField(auto_now_add=True)
+    fullname = models.CharField(max_length=90, blank= True, null= True)
     observ = models.CharField(null=True, blank=True, max_length=255)
 
     class Meta:
@@ -73,8 +66,8 @@ class MonetaryUser(models.Model):
     phone = models.CharField(null=False, blank=False, max_length=9, unique=True)
     email = models.EmailField(max_length=254, null=False, blank=False, unique=True)
     address = models.CharField(null=True, blank=True, max_length=255)
-    nid = models.CharField(max_length=9, null=False, blank=False, unique=True)
-    bank = models.CharField(null=True, blank=True, max_length=40)
+    nid = models.CharField(max_length=9, null=True, blank=True, unique=True)
+    bankName = models.CharField(null=True, blank=True, max_length=40)
     bankAccount = models.CharField(null=True, blank=True, max_length=40)
     bicSwift = models.CharField(null=True, blank=True, max_length=20)
     contract = models.FileField(upload_to=file_upload_to, null=True, blank=True)
@@ -119,15 +112,15 @@ class Teacher(BaseUser, MonetaryUser):
         BaseUser, on_delete=models.DO_NOTHING, null=True, blank=True, related_name="administrator"
     )
     #creator = models.ForeignKey(BaseUser, on_delete=models.DO_NOTHING, related_name="creator")
-    speciality = models.CharField(null=True, blank=True, max_length=40)
+    speciality = models.CharField(null=True, blank=True, max_length=100)
     students = models.ManyToManyField(Student, blank=True)
     nidPhoto1 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
     nidPhoto2 = models.ImageField(upload_to=file_upload_to, null=True, blank=True)
     origin = models.ForeignKey(
         Origin, null=True, blank=True, on_delete=models.DO_NOTHING
     )
-    prices = models.CharField(null=True, blank=True, max_length=150)
-    availability = models.CharField(null=True, blank=True, max_length=150)
+    prices = models.CharField(null=True, blank=True, max_length=2000, default="ESO: 16.6 € / h\nBachiller: 18 € / h\nUniversidad: 20 € / h\nBachiller: 18 € / h\nPremium: 25 € / h")
+    availability = models.CharField(null=True, blank=True, max_length=150, default= "Lunes: \nMartes: \nMiércoles: \nJueves: \nViernes: \nSábado: \nDomingo: ")
 
     class Meta:
         verbose_name = "Teacher" # Aparecen mejor en el menu del admin
@@ -135,3 +128,7 @@ class Teacher(BaseUser, MonetaryUser):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}, {self.nid}"
+
+    def save(self, *args, **kwargs):
+        self.username = self.email
+        super(BaseUser, self).save(*args, **kwargs)

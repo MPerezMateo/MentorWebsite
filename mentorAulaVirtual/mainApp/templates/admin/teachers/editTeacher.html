@@ -6,6 +6,10 @@
 {% load static %}
 
 {{ error }}
+{{ form.errors }}
+{{ form.management_form }}
+{{ form.non_field_errors }}
+{{ form.non_form_errors }}
 
 <div class = "container py-3 border border-primary border-3 rounded" style= "border-color: #55acee;">
   <div class = "row">
@@ -30,11 +34,8 @@
     {% csrf_token %}
 
     <!-- Bloque 1 -->
-    <div class = "row d-flex py-2 justify-content-center">
-      Etiqueta
-    </div>
 
-    <div class = "row d-flex py-2 justify-content-center">
+    <!--<div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Administrador
       </div>
@@ -49,8 +50,7 @@
       </div>
     </div>
 
-    <hr>
-
+    <hr>-->
     <div class = "row d-flex py-2 justify-content-center">
       Perfil Registro
     </div>
@@ -60,7 +60,7 @@
         Nombre profesor
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input value="{{teacher.name}}" name = "name" id = "name" class = "form-control form-control-lg" placeholder = "Paco" required/>
+        <input value="{{teacher.first_name}}" name = "first_name" id = "first_name" class = "form-control form-control-lg" placeholder = "Paco" required/>
       </div>
     </div>
 
@@ -69,7 +69,7 @@
         Apellidos profesor
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input value="{{teacher.surnames}}" name = "surnames" id = "surnames" class = "form-control form-control-lg" placeholder = "Pérez Rordriguez" required/>
+        <input value="{{teacher.last_name}}" name = "last_name" id = "last_name" class = "form-control form-control-lg" placeholder = "Pérez Rordriguez" required/>
       </div>
     </div>
 
@@ -93,6 +93,69 @@
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
+        Contraseña
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input value="{{teacher.password}}" type="password" name="password" id="password" required>
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Dirección
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input value="{{teacher.address|default_if_none:''}}" type="text" name="address" id="address" placeholder="correo@gmail.com">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        DNI
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input value="{{teacher.nid|default_if_none:''}}" type="text" name="nid" id="nid" placeholder="correo@gmail.com">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Banco (nombre)
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input value="{{teacher.bankName|default_if_none:''}}" type="text" name="bankName" id="bankName" placeholder="banco x">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Cuenta Bancaria
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input value="{{teacher.bankAccount|default_if_none:''}}" type="text" name="bankAccount" id="bankAccount" placeholder="">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Código BIC/SWIFT
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input value="{{teacher.bicSwift|default_if_none:''}}" type="text" name="bicSwift" id="bicSwift" placeholder="">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Estudios
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <input value="{{teacher.studies|default_if_none:''}}" type="text" name="studies" id="studies" placeholder="">
+      </div>
+    </div>
+
+    <div class = "row d-flex py-2 justify-content-center">
+      <div class = "col-3 col-sm-auto ps-5" >
         Foto de Perfil
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
@@ -101,9 +164,6 @@
     </div>
 
     <div class = "row d-flex py-2 justify-content-center">
-      <div class = "col-3 col-sm-auto ps-5" >
-        Foto de Perfil
-      </div>
       <div class = "col-3 col-sm-auto ps-5 " >
         <img id="output" width="200"/>
       </div>
@@ -118,21 +178,25 @@
       </div>
     </div>
 
+    {% if origins %}
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Origen
       </div>
       <div class = "col-3 col-sm-auto ps-5" >
         <select name="origin" class="form-select" aria-label="Default select example">
-          {% if origins %}
           {% for origin in origins %}
-            <option value={{origin.name}}>{{origin.name}}</option>
+            <option value={{origin.id}}>{{origin.name}}
+            {% if teacher.origin == origin %}
+             selected
+            {% endif %}
+            </option>
           {% endfor %}
-          {% endif %}
         </select>
       </div>
     </div>
-    
+    {% endif %}
+
     <hr>
     <div class = "row d-flex py-2 justify-content-center">
       Perfil Docente
@@ -140,45 +204,49 @@
 
     <!-- Bloque 2 -->
 
+    {% if subjects %}
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Asignaturas
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
         <select name="subjects" class="selectpicker" multiple data-live-search="true" data-none-selected-text ="Escribe para buscar">
-          {% if subjects %}
-              {% for subject in subjects %}
-                <option value={{subject.name}}> {{subject.name}} </option>
-              {% endfor %}
-          {% endif %}
+           {% for subject in subjects %}
+            <option value={{subject.name}}> {{subject.name}} </option>
+          {% endfor %}
         </select>
       </div>
     </div>
+    {% endif %}
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Especialidad
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea name = "speciality"></textarea>
+        <textarea name = "speciality">
+        {% if teacher.speciality %}
+          {{teacher.speciality}}
+        {% endif %}
+        </textarea>
       </div>
     </div>
 
-    <!-- <div class = "row d-flex py-2 justify-content-center">
+    <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Experiencia docente
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="text" name="xpYears" id="xpYears" required> 
+        <input value ={{teacher.workingXp}}  type="number" name="workingXp" id="workingXp"> 
       </div>
-    </div> -->
+    </div>
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Objetivo de horas semanales
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="estHours" id="estHours"> <!--required  -->
+        <input value ={{teacher.estHours}} type="number" name="estHours" id="estHours">
       </div>
     </div>
 
@@ -187,7 +255,7 @@
         Disponibilidad
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea name = "availability" style="height: 185px;" required>Lunes: &#13;&#10;Martes: &#13;&#10;Miércoles: &#13;&#10;Jueves: &#13;&#10;Viernes: &#13;&#10;Sábado: &#13;&#10;Domingo: </textarea>
+        <textarea name = "availability" style="height: 185px;">{% if teacher.availability %}{{teacher.availability}}{% endif %}</textarea>
       </div>
     </div>
 
@@ -196,7 +264,7 @@
         Precios
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <textarea name = "prices" style="height: 135px;" required>ESO: 16.6 € / h&#13;&#10;Bachiller: 18 € / h&#13;&#10;Universidad: 20 € / h&#13;&#10;Bachiller: 18 € / h&#13;&#10;Premium: 25 € / h </textarea>
+        <textarea name = "prices" style="height: 135px;">{% if teacher.prices %}{{teacher.prices}}{% endif %}</textarea>
       </div>
     </div>
 
@@ -232,4 +300,10 @@
     </div>
   </form>
 </div>
+<script>
+  var loadFile = function(event) {
+      var image = document.getElementById('output');
+      image.src=URL.createObjectURL(event.target.files[0]);
+  };
+</script>
 {% endblock content %}

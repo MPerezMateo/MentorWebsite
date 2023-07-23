@@ -6,6 +6,10 @@
 {% load static %}
 
 {{ error }}
+{{ form.errors }}
+{{ form.management_form }}
+{{ form.non_field_errors }}
+{{ form.non_form_errors }}
 
 <div class = "container py-3 border border-primary border-3 rounded" style= "border-color: #55acee;">
   <div class = "row">
@@ -32,9 +36,8 @@
   <!-- Empieza el formulario -->
   <form method = "POST" enctype="multipart/form-data">
     {% csrf_token %}
-
     <!-- Bloque 1 -->
-    <div class = "row d-flex py-2 justify-content-center">
+    <!--<div class = "row d-flex py-2 justify-content-center">
       Etiqueta
     </div>
 
@@ -53,7 +56,7 @@
       </div>
     </div>
 
-    <hr>
+    <hr>-->
 
     <div class = "row d-flex py-2 justify-content-center">
       Perfil Registro
@@ -64,7 +67,7 @@
         Nombre profesor
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input name = "name" id = "name" class = "form-control form-control-lg" placeholder = "Paco" required/>
+        <input name = "first_name" id = "first_name" class = "form-control form-control-lg" placeholder = "Nombre" required/>
       </div>
     </div>
 
@@ -73,7 +76,7 @@
         Apellidos profesor
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input name = "surnames" id = "surnames" class = "form-control form-control-lg" placeholder = "Pérez Rordriguez" required/>
+        <input name = "last_name" id = "last_name" class = "form-control form-control-lg" placeholder = "Apellidos" required/>
       </div>
     </div>
 
@@ -104,7 +107,7 @@
       </div>
     </div>
 
-    <div class = "row d-flex py-2 justify-content-center">
+    <!--<div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Foto de Perfil
       </div>
@@ -129,31 +132,40 @@
       <div class = "col-3 col-sm-auto ps-5 " >
         <input type="file" name="contract" accept="application/pdf">
       </div>
-    </div>
+    </div>-->
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Origen
       </div>
-      <div class = "col-3 col-sm-auto ps-5" >
-        <select name="origin" class="form-select" aria-label="Default select example">
-          {% if origins %}
-          {% for origin in origins %}
-            <option value={{origin.name}}>{{origin.name}}</option>
-          {% endfor %}
-          {% endif %}
-        </select>
-      </div>
+      {% if origins %}
+        <div class = "col-3 col-sm-auto ps-5" >
+          <select name="origin" id="id_origin" class="form-select" aria-label="Default select example">
+            {% for origin in origins %}
+              <option value={{origin.id}}>{{origin.name}}</option>
+            {% endfor %}
+          </select>
+        </div>
+      {% endif %}
+
     </div>
     
-    <hr>
+    <div class = "row d-flex py-2 justify-content-center h-100">
+      <div class = "col-3 col-sm-auto ps-5" >
+        Observaciones
+      </div>
+      <div class = "col-3 col-sm-auto ps-5 " >
+        <textarea name = "observ" style="height: 185px; width: 300px"></textarea>
+      </div>
+    </div>
+    <!--<hr>
     <div class = "row d-flex py-2 justify-content-center">
       Perfil Docente
-    </div>
+    </div>-->
 
     <!-- Bloque 2 -->
 
-    <div class = "row d-flex py-2 justify-content-center">
+    <!--<div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Asignaturas
       </div>
@@ -177,21 +189,21 @@
       </div>
     </div>
 
-    <!-- <div class = "row d-flex py-2 justify-content-center">
+    <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Experiencia docente
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
         <input type="text" name="xpYears" id="xpYears" required> 
       </div>
-    </div> -->
+    </div> 
 
     <div class = "row d-flex py-2 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5" >
         Objetivo de horas semanales
       </div>
       <div class = "col-3 col-sm-auto ps-5 " >
-        <input type="number" name="estHours" id="estHours"> <!--required  -->
+        <input type="number" name="estHours" id="estHours"> 
       </div>
     </div>
 
@@ -226,7 +238,7 @@
           {% endif %}
         </select>
       </div>
-    </div>
+    </div>-->
 
     <div class = "row d-flex py-5 justify-content-center">
       <div class = "col-3 col-sm-auto ps-5 " >
@@ -245,10 +257,4 @@
     </div>
   </form>
 </div>
-<script>
-  var loadFile = function(event) {
-      var image = document.getElementById('output');
-      image.src=URL.createObjectURL(event.target.files[0]);
-  };
-</script>
 {% endblock content %}

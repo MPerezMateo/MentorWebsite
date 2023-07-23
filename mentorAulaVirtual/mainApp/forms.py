@@ -1,31 +1,27 @@
 from django import forms
 from django.forms import ModelForm
 from django.db import models
-from .models import Teacher, Client, Student
+from .models import Teacher, Client, Student, Origin
 
 
-class TeacherForm(ModelForm):
-    password = models.CharField(max_length=20, null=False, blank=False)
+class CreateTeacherForm(ModelForm):
 
     class Meta:
         model = Teacher
-        fields = [
-            "admin",
-            "first_name",
-            "last_name",
-            "phone",
-            "email",
-            "profilePic",
-            "contract",
-            "origin",
-            "subjects",
-            "speciality",
-            "estHours",
-            "availability",
-            "prices",
-            "students",
-        ]
+        fields = (
+            "first_name", "last_name","password", "phone", "email", "origin", "observ",
+        )
 
+class EditTeacherForm(ModelForm):
+    
+    class Meta:
+        model = Teacher
+        fields = (
+            "first_name", "last_name", "phone", "email", "password", "address",
+            "nid","bankName","bankAccount","bicSwift","studies","profilePic",
+            "contract","origin","speciality","availability", "workingXp","estHours","prices",
+            "students"
+        )
 
 class TeacherSearchForm(forms.Form):
     nameSearch = forms.CharField()

@@ -6,7 +6,8 @@ from django.contrib.auth.models import User
 
 from .models import BaseUser, Teacher, Client, Student, Subject, Origin 
 from .forms import (
-    TeacherForm,
+    CreateTeacherForm,
+    EditTeacherForm,
     TeacherSearchForm,
     ClientForm,
     ClientSearchForm,
@@ -58,7 +59,6 @@ def teachers(request):
     timeSearch = request.GET.get("timeSearch")
     studSearch = request.GET.get("studSearch")
     teachers = Teacher.objects.all()
-    print(teachers[0].id )
     # Aplicamos filtros
     if teacherSearch:
         teachers = teachers.filter(first_name__contains=teacherSearch)
@@ -87,36 +87,25 @@ def teachers(request):
 @login_required
 def createTeacher(request):
     if request.method == "GET":
-        return render(request, "admin/teachers/createTeacher.html")
+        return render(request, "admin/teachers/createTeacher.html", {
+          "form": CreateTeacherForm(),
+          "origins": Origin.objects.all(),
+        })
 
     else:
         try:
-            form = TeacherForm(request.POST, request.FILES)
+            form = CreateTeacherForm(request.POST)
             for key, value in dict(request.POST).items():
                 print(key, "-> ", value)
             newTeacher = form.save(commit=False)
             newTeacher.creator = request.user
             newTeacher.save()
-            BaseUser = BaseUser.objects.create_user(
-                username=request.POST["nid"],
-                first_name=request.POST["first_name"],
-                last_name=request.POST["last_name"],
-                email=request.POST["email"],
-                password=request.POST["password"],
-            )
             return redirect("teachers")
         except Exception as e:
-            print(e)
             return render(
                 request,
-                "admin/teachers/teachers.html",
-                {
-                    "form": TeacherForm(),
-                    "searchForm": TeacherSearchForm(),
-                    "teachers": teachers,
-                    "students": Student.objects.all(),
-                    "staff": BaseUser.objects.values().filter(is_staff=True),
-                    "subjects": Subject.objects.all(),
+                "admin/teachers/createTeacher.html",{
+                    "form": form,
                     "origins": Origin.objects.all(),
                     "error": "Datos inválidos en el formulario de profesor. Asegúrate de que todos los campos estén cumplimentados y que el profesor no se encuentre ya en el sistema",
                 },
@@ -126,20 +115,25 @@ def createTeacher(request):
 @login_required
 def editTeacher(request, teacher_id):
     teacher = get_object_or_404(Teacher, pk=teacher_id)
+    print(teacher.prices)
     staff = BaseUser.objects.values().filter(is_staff=True)
     if request.method == "GET":
-        form = TeacherForm(instance=teacher)
+        form = EditTeacherForm(instance=teacher)
         return render(
             request,
             "admin/teachers/editTeacher.html",
-            {"teacher": teacher, "staff": staff, "form": form},
+            {
+              "form": form,
+              "teacher": teacher,
+              "staff": staff,
+              "origins": Origin.objects.all()
+            },
         )
 
     else:
         try:
-            form = TeacherForm(request.POST, instance=teacher)
+            form = EditTeacherForm(request.POST,request.FILES, instance=teacher)
             form.save()
-
             return redirect("teachers")
         except ValueError:
             return render(
@@ -218,7 +212,7 @@ def createClient(request):
                 {
                     "form": ClientForm(),
                     "searchForm": TeacherSearchForm(),
-                    "teachers": teachers,
+                    "teachers": Teachers.objects.all(),
                     "students": Student.objects.all(),
                     "staff": BaseUser.objects.values().filter(is_staff=True),
                     "subjects": Subject.objects.all(),

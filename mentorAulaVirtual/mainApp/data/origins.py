@@ -1,5 +1,5 @@
-origins = """Instagram
-LinkedIN
+origins = """LinkedIN
+Instagram
 TusClasesParticulares
 Web
 Boca a boca
